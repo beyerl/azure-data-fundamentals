@@ -34,16 +34,18 @@
 </ul>
 <h4 id="describe-data-processing-solutions">Describe data processing solutions</h4>
 <h5 id="what-is-a-transactional-system">What is a transactional system?</h5>
-<ul>
-<li>A transactional system records <em>transactions</em>. Think of a transaction as a small, discrete, unit of work. A transaction could be financial, such as the movement of money between accounts in a banking system, or it might be part of a retail system, tracking payments for goods and services from customers.</li>
-<li>The work performed by transactional systems is often referred to as Online Transactional Processing (OLTP).</li>
-<li>To support fast processing, the data in a transactional system is often divided into small pieces. For example, if you’re using a relational system each table involved in a transaction only contains the columns necessary to perform the transactional task.</li>
-<li>Splitting tables out into separate groups of columns like this is called <em>normalized</em>.</li>
-<li>Normalization can enable a transactional system to cache much of the information required to perform transactions in memory, and speed throughput.</li>
-</ul>
+<p>A transactional system records <em>transactions</em>. Think of a transaction as a small, discrete, unit of work. A transaction could be financial, such as the movement of money between accounts in a banking system, or it might be part of a retail system, tracking payments for goods and services from customers.<br>
+The work performed by transactional systems is often referred to as Online Transactional Processing (OLTP).<br>
+To support fast processing, the data in a transactional system is often divided into small pieces. For example, if you’re using a relational system each table involved in a transaction only contains the columns necessary to perform the transactional task.<br>
+Splitting tables out into separate groups of columns like this is called <em>normalized</em>.<br>
+Normalization can enable a transactional system to cache much of the information required to perform transactions in memory, and speed throughput.</p>
 <h5 id="what-is-an-analytical-system">What is an analytical system?</h5>
+<p>Analytical systems are concerned with capturing raw data, and using it to generate insights. An organization can use these insights to make business decisions. Most analytical data processing systems need to perform similar tasks: data ingestion, data transformation, data querying, and data visualization.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-core-data-concepts/media/2-data-process.png" alt="Image depicting the elements of a typical data processing solution"></p>
 <ul>
-<li>Analytical systems are concerned with capturing raw data, and using it to generate insights. An organization can use these insights to make business decisions.</li>
-<li></li>
+<li><strong>Data Ingestion</strong>: Data ingestion is the process of capturing the raw data.</li>
+<li><strong>Data Transformation/Data Processing</strong>: The raw data might not be in a format that is suitable for querying. After data is ingested into a data repository, you may want to do some cleaning operations and remove any questionable or invalid data, or perform some aggregations such as calculating profit, margin, and other Key Performance Indicators (KPIs).</li>
+<li><strong>Data Querying</strong>: After data is ingested and transformed, you can query the data to analyze it.</li>
+<li><strong>Data Visualization</strong>: Visualizing the data can often be useful as a tool for examining data. You can generate charts such as bar charts, line charts, plot results on geographical maps, pie charts, or illustrate how data changes over time.</li>
 </ul>
 
