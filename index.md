@@ -33,4 +33,17 @@
 </li>
 </ul>
 <h4 id="describe-data-processing-solutions">Describe data processing solutions</h4>
+<h5 id="what-is-a-transactional-system">What is a transactional system?</h5>
+<ul>
+<li>A transactional system records <em>transactions</em>. Think of a transaction as a small, discrete, unit of work. A transaction could be financial, such as the movement of money between accounts in a banking system, or it might be part of a retail system, tracking payments for goods and services from customers.</li>
+<li>The work performed by transactional systems is often referred to as Online Transactional Processing (OLTP).</li>
+<li>To support fast processing, the data in a transactional system is often divided into small pieces. For example, if you’re using a relational system each table involved in a transaction only contains the columns necessary to perform the transactional task.</li>
+<li>Splitting tables out into separate groups of columns like this is called <em>normalized</em>.</li>
+<li>Normalization can enable a transactional system to cache much of the information required to perform transactions in memory, and speed throughput.</li>
+</ul>
+<h5 id="what-is-an-analytical-system">What is an analytical system?</h5>
+<ul>
+<li>Analytical systems are concerned with capturing raw data, and using it to generate insights. An organization can use these insights to make business decisions.</li>
+<li></li>
+</ul>
 
