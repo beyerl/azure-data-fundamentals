@@ -178,4 +178,50 @@ As a SQL Server professional, your primary data manipulation tool might be Trans
 </ul>
 <h4 id="common-data-visualization-tools">Common data visualization tools</h4>
 <p>Power BI is a collection of software services, apps, and connectors that work together to turn your unrelated sources of data into coherent, visually immersive, and interactive insights.</p>
+<h2 id="describe-concepts-of-relational-data">Describe concepts of relational data</h2>
+<h3 id="explore-the-characteristics-of-relational-data">Explore the characteristics of relational data</h3>
+<p>One of the main benefits of computer databases is that they make it easy to store information so it’s quick and easy to find. A relational database provides a model for storing the data, and a query capability that enables you to retrieve data quickly.</p>
+<h4 id="understand-the-characteristics-of-relational-data">Understand the characteristics of relational data</h4>
+<p>The main characteristics of a relational database are:</p>
+<ul>
+<li>
+<p>All data is tabular. Entities are modeled as tables, each instance of an entity is a row in the table, and each property is defined as a column.</p>
+</li>
+<li>
+<p>All rows in the same table have the same set of columns.</p>
+</li>
+<li>
+<p>A table can contain any number of rows.</p>
+</li>
+<li>
+<p>A primary key uniquely identifies each row in a table. No two rows can share the same primary key.</p>
+</li>
+<li>
+<p>A foreign key references rows in another, related table. For each value in the foreign key column, there should be a row with the same value in the corresponding primary key column in the other table.</p>
+</li>
+</ul>
+<p>The lines connecting the tables indicate the type of relationship:</p>
+<ul>
+<li><em>1-to-many</em>: one customer can place many orders, but each order is for a single customer.</li>
+<li><em>many-to-1</em>: several orders might be for the same product.</li>
+</ul>
+<p>Most relational databases support Structured Query Language (SQL). You use SQL to create tables, insert, update, and delete rows in tables, and to query data.</p>
+<h4 id="explore-relational-database-use-cases">Explore relational database use cases</h4>
+<p>You can use a relational database any time you can easily model your data as a collection of tables with a fixed set of columns.</p>
+<p>Relational databases are commonly used in ecommerce systems, but one of the major use cases for using relational databases is Online Transaction Processing (OLTP). OLTP applications are focused on transaction-oriented tasks that process a very large number of transactions per minute.</p>
+<h3 id="explore-relational-data-structures">Explore relational data structures</h3>
+<h4 id="what-is-an-index">What is an index?</h4>
+<p>An index helps you search for data in a table. Think of an index over a table like an index at the back of a book. When you create an index in a database, you specify a column from the table, and the index contains a copy of this data in a sorted order, with pointers to the corresponding rows in the table. When the user runs a query that specifies this column in the <em>WHERE</em> clause, the database management system can use this index to fetch the data more quickly than if it had to scan through the entire table row by row.</p>
+<p>You can create many indexes on a table. However, indexes aren’t free. An index might consume additional storage space, and each time you insert, update, or delete data in a table, the indexes for that table must be maintained. This additional work can slow down insert, update, and delete operations, and incur additional processing charges.</p>
+<p>Some relational database management systems also support <em>clustered indexes</em>. A clustered index physically reorganizes a table by the index key. This arrangement can improve the performance of queries still further, because the relational database management system doesn’t have to follow references from the index to find the corresponding data in the underlying table.</p>
+<h4 id="what-is-a-view">What is a view?</h4>
+<p>A view is a virtual table based on the result set of a query. You can query the view and filter the data in much the same way as a table.</p>
+<h3 id="choose-the-right-platform-for-a-relational-workload">Choose the right platform for a relational workload</h3>
+<p>Relational database management systems are one example of where the cloud has enabled organizations to take advantage of improved scalability. However, this scalability has to be balanced against the need for close control over the data. Data is arguably one of the most valuable assets that an organization has, and some companies aren’t willing or able to hand over responsibility for protecting this data to a third party.</p>
+<h4 id="compare-on-premises-hosting-to-the-cloud">Compare on-premises hosting to the cloud</h4>
+<p>Whether a company places its relational workload in the cloud or whether it decides to keep it on premises, data security will always be paramount.</p>
+<p>Hosting a relational database on-premises requires that an enterprise not only purchases the database software, but also maintains the necessary hardware on which to run the database. Scalability is also a concern. If you need to scale your system, you will need to upgrade or add more servers.</p>
+<p>A cloud-based approach uses virtual technology to host a company’s applications offsite. There are no capital expenses, data can be backed up regularly, and companies only have to pay for the resources they use. For those organizations that plan aggressive expansion on a global basis, the cloud has even greater appeal because it allows you to connect with customers, partners, and other businesses anywhere with minimal effort. Additionally, cloud computing gives you nearly instant provisioning because everything is already configured.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/describe-concepts-of-relational-data/media/4-on-premises-cloud.png" alt="Compare on-premises with cloud"></p>
+<h4 id="understand-iaas-and-paas">Understand IaaS and PaaS</h4>
 
