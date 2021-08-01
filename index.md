@@ -475,4 +475,5 @@ Examples of descriptive analytics include generating reports to provide a view o
 <h4 id="cognitive-analytics">Cognitive analytics</h4>
 <p>Cognitive analytics attempts to draw inferences from existing data and patterns, derive conclusions based on existing knowledge bases, and then add these findings back into the knowledge base for future inferences–a self-learning feedback loop. Cognitive analytics helps you to learn what might happen if circumstances change, and how you might handle these situations.<br>
 Effective cognitive analytics depends on machine learning algorithms. It uses several NLP (Natural Language Processing) concepts to make sense of previously untapped data sources, such as call center conversation logs and product reviews.</p>
+<p><a href="https://docs.microsoft.com/de-de/learn/paths/azure-data-fundamentals-explore-relational-data/">hier weiter</a></p>
 
