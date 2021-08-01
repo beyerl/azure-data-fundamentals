@@ -248,10 +248,60 @@ Azure offers several PaaS solutions for relational databases, include Azure SQL 
 </ul>
 <h3 id="describe-types-of-non-relational-data">Describe types of non-relational data</h3>
 <h4 id="what-is-semi-structured-data">What is semi-structured data?</h4>
-<p>Semi-structured data is data that contains fields. The fields don’t have to be the same in every entity. You only define the fields that you need on a per-entity basis. The data must be formatted in such a way that an application can parse and process it. One common way of doing this is to store the data for each entity as a JSON document.<br>
-Other formats you might see include <em>Avro</em>, <em>ORC</em>, and <em>Parquet</em>:</p>
+<p>Semi-structured data is data that contains fields. The fields don’t have to be the same in every entity. You only define the fields that you need on a per-entity basis. The data must be formatted in such a way that an application can parse and process it. One common way of doing this is to store the data for each entity as a JSON document.</p>
+<pre><code>{
+  "ID": "1",
+  "Name": "Mark Hanson",
+  "Telephone": [ 
+    { "Home": "1-999-9999999" }, 
+    { "Business": "1-888-8888888" }, 
+    { "Cell": "1-777-7777777" }
+  ],
+  "Address": [ 
+    { "Home": [
+      { "StreetAddress": "121 Main Street" }, 
+      { "City": "Some City" },
+      { "State": "NY" }, 
+      { "Zip": "10110" }
+    ] },
+    { "Business": [
+      { "StreetAddress": "87 Big Building" },
+      { "City": "Some City" },
+      { "State": "NY" },
+      { "Zip": "10111" }
+    ] }
+  ] 
+}
+
+
+{
+  "ID": "2",
+  "Title": "Mr",
+  "Name": "Jeff Hay",
+  "Telephone": [ 
+    { "Home": "0044-1999-333333" }, 
+    { "Mobile": "0044-17545-444444" }
+  ],
+  "Address": [
+    { "UK": [
+      { "StreetAddress": "86 High Street" },
+      { "Town": "Some Town" }, 
+      { "County": "A County" }, 
+      { "Postcode": "GL8888" }, 
+      { "Region": "UK" }
+    ] },
+    { "US": [
+      { "StreetAddress": "777 7th Street" }, 
+      { "City": "Another City" },
+      { "State": "CA" },
+      { "Zip": "90111" }
+    ] }
+  ]
+}
+</code></pre>
+<p>Other formats you might see include <em>Avro</em>, <em>ORC</em>, and <em>Parquet</em>:</p>
 <ul>
-<li><em>Avro</em> is a row-based format. It was created by Apache. Each record contains a header that describes the structure of the data in the record.</li>
+<li><em>Avro</em> is a row-based format. It was created by Apache. Each record contains a header that describes the structure of the data in the record. Each record contains a header that describes the structure of the data in the record. This header is stored as JSON. The data is stored as binary information. This example is a subset of the header information for the previous example, formatted as Avro:</li>
 </ul>
 <pre><code>{
   "type": "record",
@@ -293,4 +343,136 @@ Other formats you might see include <em>Avro</em>, <em>ORC</em>, and <em>Parquet
   ]
 }
 </code></pre>
+<ul>
+<li><em>ORC</em> (Optimized Row Columnar format) organizes data into columns rather than rows. It was developed by HortonWorks for optimizing read and write operations in Apache Hive. Hive is a data warehouse system that supports fast data summarization and querying over very large datasets.</li>
+<li><em>Parquet</em> is another columnar data format. It was created by Cloudera and Twitter. A Parquet file contains row groups. Data for each column is stored together in the same row group. Each row group contains one or more chunks of data.</li>
+</ul>
+<h4 id="what-is-unstructured-data">What is unstructured data?</h4>
+<p>Unstructured data is data that doesn’t naturally contain fields. Examples include video, audio, and other media streams. Each item is an amorphous blob of binary data. You can’t search for specific elements in this data.</p>
+<p>In Azure, you would probably store video and audio data as block blobs in an Azure Storage account. (The term <em>blob</em> stands for Binary Large Object*).</p>
+<p>You could also consider files as a form of unstructured data, although in some cases a file might include metadata that indicates what type of file it is (photograph, Word document, Excel spreadsheet, and so on), owner, and other elements that could be stored as fields.</p>
+<h3 id="describe-types-of-non-relational-and-nosql-databases">Describe types of non-relational and NoSQL databases</h3>
+<h4 id="what-is-nosql">What is NoSQL?</h4>
+<p>NoSQL is a rather loose term that simply means non-relational. There’s some debate about whether it’s intended to imply <em>Not SQL</em>, or <em>Not Only SQL</em>.</p>
+<p>NoSQL (non-relational) databases generally fall into four categories: key-value stores, document databases, column family databases, and graph databases.</p>
+<h4 id="what-is-a-key-value-store">What is a key-value store?</h4>
+<p>A key-value store is the simplest (and often quickest) type of NoSQL database for inserting and querying data. Each data item in a key-value store has two elements, a key and a value.</p>
+<ul>
+<li>
+<p>The key uniquely identifies the item, and the value holds the data for the item.</p>
+</li>
+<li>
+<p>The value is <em>opaque</em> to the database management system. The term <em>opaque</em> means that the database management system just sees the value as an unstructured block.<br>
+Items are stored in key order.</p>
+</li>
+<li>
+<p>A query specifies the keys to identify the items to be retrieved.</p>
+</li>
+<li>
+<p>You can’t search on values.</p>
+</li>
+<li>
+<p>Write operations are restricted to inserts and deletes. If you need to update an item, you must retrieve the item, modify it in memory (in the application), and then write it back to the database, overwriting the original (effectively a delete and an insert).</p>
+</li>
+</ul>
+<p>The focus of a key-value store is the ability to read and write data very quickly.</p>
+<p>Azure Table storage is an example of a key-value store. Cosmos DB also implements a key-value store using the Table API.</p>
+<h4 id="what-is-a-document-database">What is a document database?</h4>
+<ul>
+<li>
+<p>In a document database, each document has a unique ID, but the fields in the documents are transparent to the database management system.</p>
+</li>
+<li>
+<p>Document databases typically store data in JSON format, as described in the previous unit, or they could be encoded using other formats such as XML, YAML, JSON, BSON. Documents could even be stored as plain text.</p>
+</li>
+<li>
+<p>The fields in documents are exposed to the storage management system, enabling an application to query and filter data by using the values in these fields.</p>
+</li>
+<li>
+<p>Typically, a document contains the entire data for an entity. A single document may contain information that would be spread across several relational tables in an RDBMS (relational database management system).</p>
+</li>
+<li>
+<p>A document store does not require that all documents have the same structure.</p>
+</li>
+</ul>
+<h4 id="what-is-a-column-family-database">What is a column family database?</h4>
+<p>A column family database organizes data into rows and columns. Examples of this structure include ORC and Parquet files, described in the previous unit.</p>
+<p>In its simplest form, a column family database can appear very similar to a relational database, at least conceptually. The real power of a column family database lies in its denormalized approach to structuring sparse data.<br>
+For example, if you need to store information about customers and their addresses in a relational database (ignoring the need to maintain historical data as described in the previous section), you might design a schema similar to that shown below. This diagram also shows some sample data. In this example, customer 1 and customer 3 share the same address, and the schema ensures that this address information is not duplicated. This is a standard way of implementing a one-to-many relationship.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-non-relational-data/media/4-relational.png" alt="Relational structure showing customers and addresses"></p>
+<p>The relational model supports a very generalized approach to implementing this type of relationship, but to find the address of any given customer an application needs to run a query that joins two tables. If this is the most common query performed by the application, then the overhead associated with performing this join operation can quickly become significant if there are a large number of requests and the tables themselves are large.</p>
+<p>The purpose of a column family database is to efficiently handle situations such as this. You can think of a column family database as holding tabular data comprising rows and columns, but you can divide the columns into groups known as column-families. Each column family holds a set of columns that are logically related together. The image below shows one way of structuring the same information as the previous image, by using a column family database to group the data into two column-families holding the customer name and address information. Other ways of organizing the columns are possible, but you should implement your column-families to optimize the most common queries that your application performs.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-non-relational-data/media/4-column-family.png" alt="Example of a column family database">In most column family databases, the column-families are stored separately. The data for a single entity that spans multiple column-families will have the same row key in each column family. As an alternative to the conceptual layout shown previously, you can visualize the data shown as the following pair of physical structures.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-non-relational-data/media/4-column-family-physical.png" alt="The physical structure of a column family database"><br>
+The most widely used column family database management system is Apache Cassandra. Azure Cosmos DB supports the column-family approach through the Cassandra API.</p>
+<h4 id="what-is-a-graph-database">What is a graph database?</h4>
+<p>Graph databases enable you to store entities, but the main focus is on the relationships that these entities have with each other. A graph database stores two types of information: nodes that you can think of as instances of entities, and edges, which specify the relationships between nodes. Nodes and edges can both have properties that provide information about that node or edge (like columns in a table). Additionally, edges can have a direction indicating the nature of the relationship.</p>
+<p>The purpose of a graph database is to enable an application to efficiently perform queries that traverse the network of nodes and edges, and to analyze the relationships between entities. You can often store the same information in a relational database, but the SQL required to query this information might require many expensive recursive join operations and nested subqueries.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-non-relational-data/media/4-graph.png" alt="Graph Store"></p>
+<p>Azure Cosmos DB supports graph databases using the Gremlin API. The Gremlin API is a standard language for creating and querying graphs.</p>
+<h2 id="explore-concepts-of-data-analytics">Explore concepts of data analytics</h2>
+<h3 id="describe-data-ingestion-and-processing">Describe data ingestion and processing</h3>
+<p>Data analytics is concerned with taking data and finding meaningful information and inferences from it.<br>
+The data a company uses can come from many sources. In a data analytics solution, you combine this data and construct a data warehouse that you can use to ask (and answer) questions about your business operations. Building a data warehouse requires that you can capture the data that you need and <em>wrangle</em> it into an appropriate format. You can then use analysis tools and visualizations to examine the information, and identify trends and their causes. <em>Wrangling</em> is the process by which you transform and map raw data into a more useful format for analysis.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/2-data-process.png" alt="A typical data analytics architecture depicting data ingestion, processing, and exploration"></p>
+<h4 id="what-is-data-ingestion">What is data ingestion?</h4>
+<p>Data ingestion is the process of obtaining and importing data for immediate use or storage in a database. The data can arrive as a continuous stream, or it may come in batches, depending on the source. The purpose of the ingestion process is to capture this data and store it. This raw data can be held in a repository such as a database management system, a set of files, or some other type of fast, easily accessible storage. The ingestion process might also perform filtering.  It may also be possible to perform some transformations at this stage, converting data into a standard form for later processing. However, these transformations must be quick to perform.</p>
+<h4 id="what-is-data-processing">What is data processing?</h4>
+<p>The data processing stage occurs after the data has been ingested and collected. Data processing takes the data in its raw form, cleans it, and converts it into a more meaningful format (tables, graphs, documents, and so on). The result is a database of data that you can use to perform queries and generate visualizations. Data cleaning is a generalized term that encompasses a range of actions, such as removing anomalies, and applying filters and transformations that would be too time-consuming to run during the ingestion stage.</p>
+<p>The aim of data processing is to convert the raw data into one or more business models. A business model describes the data in terms of meaningful business entities, and may aggregate items together and summarize information.</p>
+<p>The data processing stage could also generate predictive or other analytical models from the data. Data processing can be complex, and may involve automated scripts, and tools such as Azure Databricks, Azure Functions, and Azure Cognitive Services to examine and reformat the data, and generate models. A data analyst could use machine learning to help determine future trends based on these models.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/2-process-stage.png" alt="Processing ingested data to generate data models"></p>
+<h4 id="what-is-elt-and-etl">What is ELT and ETL?</h4>
+<p>ETL stands for <em>Extract, Transform, and Load</em>. The raw data is retrieved and transformed before being saved. The extract, transform, and load steps can be performed as a continuous pipeline of operations. It is suitable for systems that only require simple models, with little dependency between items. For example, this type of process is often used for basic data cleaning tasks, deduplicating data, and reformatting the contents of individual fields.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/2-extract-transform-load.png" alt="Image showing the ETL process"></p>
+<p>An alternative approach is <em>ELT</em>. ELT is an abbreviation of <em>Extract, Load, and Transform</em>. The process differs from ETL in that the data is stored before being transformed. The data processing engine can take an iterative approach, retrieving and processing the data from storage, before writing the transformed data and models back to storage. ELT is more suitable for constructing complex models that depend on multiple items in the database, often using periodic batch processing.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/2-extract-load-transform.png" alt="Image showing the ELT process"></p>
+<p>ELT is a scalable approach that is suitable for the cloud because it can make use of the extensive processing power available. However, ETL can filter data before it’s stored. In this way, ETL can help with data privacy and compliance, removing sensitive data before it arrives in your analytical data models.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/2-etl-vs-elt.png" alt="ETL versus ELT"></p>
+<h3 id="explore-data-visualization">Explore data visualization</h3>
+<p>A business model can contain an enormous amount of information. The purpose of producing a model such as this is to help you reason over the information it contains, ask questions, and hopefully obtain answers that can help you drive your business forward.</p>
+<h4 id="what-is-reporting">What is reporting?</h4>
+<p>Reporting is the process of organizing data into informational summaries to monitor how different areas of an organization are performing.</p>
+<h4 id="what-is-business-intelligence">What is business intelligence?</h4>
+<p>The term <em>Business Intelligence</em> (BI) refers to technologies, applications, and practices for the collection, integration, analysis, and presentation of business information. The purpose of business intelligence is to support better decision making.<br>
+Information is often gathered about other companies in the same industry for comparison. This process of comparison with other companies in the same industry is known as <em>benchmarking</em>.</p>
+<h4 id="what-is-data-visualization">What is data visualization?</h4>
+<p>Data visualization is the graphical representation of information and data. By using visual elements like charts, graphs, and maps, data visualization tools provide an accessible way to spot and understand trends, outliers, and patterns in data. If you are using Azure, the most popular data visualization tool is Power BI.</p>
+<h5 id="explore-visualization-options-to-represent-data">Explore visualization options to represent data</h5>
+<p>Data visualization helps you to focus on the meaning of data, rather than looking at the data itself.</p>
+<p>The most common forms of visualizations are:</p>
+<ul>
+<li><em>Bar and column charts</em>: Bar and column charts enable you to see how a set of variables changes across different categories.</li>
+<li><em>Line charts</em>: Line charts emphasize the overall shape of an entire series of values, usually over time.</li>
+<li><em>Matrix</em>: A matrix visual is a tabular structure that summarizes data.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/3-matrix.png" alt="Example of a Matrix Visual">- <em>Key influencers</em>: A key influencer chart displays the major contributors to a selected result or value.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/3-influencer.png" alt="Example of a Key influencers Visual">- <em>Treemap</em>: Treemaps are charts of colored rectangles, with size representing the relative value of each item. They can be hierarchical, with rectangles nested within the main rectangles.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/3-treemap.png" alt="Example of a treemap Visual"></li>
+<li><em>Scatter</em>: A scatter chart shows the relationship between two numerical values. A <em>bubble chart</em> is a scatter chart that replaces data points with bubbles, with the bubble size representing an additional third data dimension.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/3-bubble.png" alt="Example of a bubble Visual">A dot plot chart is similar to a bubble chart and scatter chart, but can plot categorical data along the X-Axis.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/3-dotplot.png" alt="Example of a dotplot Visual">-   <em>Filled map</em>. If you have geographical data, you can use a filled map to display how a value differs in proportion across a geography or region. You can see relative differences with shading that ranges from light (less-frequent/lower) to dark (more-frequent/more).<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/3-filled-map.png" alt="Example of a filled map Visual"></li>
+</ul>
+<h3 id="explore-data-analytics">Explore data analytics</h3>
+<p>Data analytics is concerned with examining, transforming, and arranging data so that you can study it and extract useful information. Data analytics is a discipline that covers the entire range of data management tasks. These tasks not only include analysis, but also data collection, organization, storage, and all the tools and techniques used.</p>
+<p>The term <em>data analytics</em> is a catch-all that covers a range of activities, each with its own focus and goals. You can categorize these activities as <em>descriptive</em>, <em>diagnostic</em>, <em>predictive</em>, <em>prescriptive</em>, and <em>cognitive</em> analytics.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-concepts-of-data-analytics/media/4-analytics-table.png" alt="Categories of analytics"></p>
+<h4 id="descriptive-analytics">Descriptive analytics</h4>
+<p>Descriptive analytics helps answer questions about what has happened, based on historical data. Descriptive analytics techniques summarize large datasets to describe outcomes to stakeholders.<br>
+By developing KPIs (Key Performance Indicators), these strategies can help track the success or failure of key objectives.<br>
+Examples of descriptive analytics include generating reports to provide a view of an organization’s sales and financial data.</p>
+<h4 id="diagnostic-analytics">Diagnostic analytics</h4>
+<p>Diagnostic analytics helps answer questions about why things happened. Diagnostic analytics techniques supplement more basic descriptive analytics. They take the findings from descriptive analytics and dig deeper to find the cause. The performance indicators are further investigated to discover why they got better or worse. This generally occurs in three steps:</p>
+<ol>
+<li>Identify anomalies in the data. These may be unexpected changes in a metric or a particular market.</li>
+<li>Collect data that’s related to these anomalies.</li>
+<li>Use statistical techniques to discover relationships and trends that explain these anomalies.</li>
+</ol>
+<h4 id="predictive-analytics">Predictive analytics</h4>
+<p>Predictive analytics helps answer questions about what will happen in the future. Predictive analytics techniques use historical data to identify trends and determine if they’re likely to recur. Techniques include a variety of statistical and machine learning techniques such as neural networks, decision trees, and regression.</p>
+<h4 id="prescriptive-analytics">Prescriptive analytics</h4>
+<p>Prescriptive analytics helps answer questions about what actions should be taken to achieve a goal or target. By using insights from predictive analytics, data-driven decisions can be made. This technique allows businesses to make informed decisions in the face of uncertainty. Prescriptive analytics techniques rely on machine learning strategies to find patterns in large datasets. By analyzing past decisions and events, the likelihood of different outcomes can be estimated.</p>
+<h4 id="cognitive-analytics">Cognitive analytics</h4>
+<p>Cognitive analytics attempts to draw inferences from existing data and patterns, derive conclusions based on existing knowledge bases, and then add these findings back into the knowledge base for future inferences–a self-learning feedback loop. Cognitive analytics helps you to learn what might happen if circumstances change, and how you might handle these situations.<br>
+Effective cognitive analytics depends on machine learning algorithms. It uses several NLP (Natural Language Processing) concepts to make sense of previously untapped data sources, such as call center conversation logs and product reviews.</p>
 
