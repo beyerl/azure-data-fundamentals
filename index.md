@@ -224,4 +224,5 @@ As a SQL Server professional, your primary data manipulation tool might be Trans
 <p>A cloud-based approach uses virtual technology to host a company’s applications offsite. There are no capital expenses, data can be backed up regularly, and companies only have to pay for the resources they use. For those organizations that plan aggressive expansion on a global basis, the cloud has even greater appeal because it allows you to connect with customers, partners, and other businesses anywhere with minimal effort. Additionally, cloud computing gives you nearly instant provisioning because everything is already configured.</p>
 <p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/describe-concepts-of-relational-data/media/4-on-premises-cloud.png" alt="Compare on-premises with cloud"></p>
 <h4 id="understand-iaas-and-paas">Understand IaaS and PaaS</h4>
+<p>(hier weiter)[<a href="https://docs.microsoft.com/en-us/learn/modules/describe-concepts-of-relational-data/4-choose-right-platform-relational-workload">https://docs.microsoft.com/en-us/learn/modules/describe-concepts-of-relational-data/4-choose-right-platform-relational-workload</a>]</p>
 
