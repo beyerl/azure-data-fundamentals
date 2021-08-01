@@ -229,4 +229,68 @@ The IaaS approach is best for migrations and applications requiring operating sy
 <p><strong>PaaS</strong> stands for <em>Platform-as-a-service</em>. Rather than creating a virtual infrastructure, and installing and managing the database software yourself, a PaaS solution does this for you.<br>
 Azure offers several PaaS solutions for relational databases, include Azure SQL Database, Azure Database for PostgreSQL, Azure Database for MySQL, and Azure Database for MariaDB. These services run managed versions of the database management systems on your behalf. However, you may find that there are some functional restrictions in place, and not every feature of your selected database management system may be available. These restrictions are often due to security issues. In these cases, you may need to rework your applications to remove any dependencies on these features.<br>
 <img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/describe-concepts-of-relational-data/media/4-choose-platform.png" alt="Various options of database workloads in Azure"></p>
+<h2 id="explore-concepts-of-non-relational-data">Explore concepts of non-relational data</h2>
+<h3 id="explore-characteristics-of-non-relational-data">Explore characteristics of non-relational data</h3>
+<p>In some situations, you might not have the required knowledge of the structure of your data, in advance of it arriving in your database, to record it as a neat set of rows and columns in a tabular format. This is a common scenario in systems that consume data from a wide variety of sources, such as data ingestion pipelines. In these situations, a non-relational database can prove extremely useful.</p>
+<h4 id="what-are-the-characteristics-of-non-relational-data">What are the characteristics of non-relational data?</h4>
+<p>You use a database to model some aspect of the real-world. Entities in the real-world often have highly variable structures.</p>
+<p>In another scenario, if you are ingesting data rapidly, you want to capture the data and save it very quickly. Processing the data and manipulating it into a set of rows in different tables in a relational database might not be appropriate at this point; you can perform these tasks at a later date.</p>
+<p>A key aspect of non-relational databases is that they enable you to store data in a very flexible manner. Non-relational databases don’t impose a schema on data. Instead, they focus on the data itself rather than how to structure it. This approach means that you can store information in a natural format, that mirrors the way in which you would consume, query and use it.</p>
+<p>In a non-relational system, you store the information for entities in collections or containers rather than relational tables. The lack of a fixed schema means that each entity must be self-describing.</p>
+<p>An application that queries this data must be prepared to parse the information in the entity that it retrieves.</p>
+<p>The data retrieval capabilities of a non-relational database can vary. Each entity should have a unique key value. The entities in a collection are usually stored in key-value order. Filtering data on fields other than the key would require scanning the entire collection of entities, parsing each entity in turn, and then applying any query criteria to each entity to find any matches. More advanced non-relational systems support indexing, in a similar manner to an index in a relational database.</p>
+<h4 id="identify-non-relational-database-use-cases">Identify non-relational database use cases</h4>
+<ul>
+<li><em>IoT and telematics</em>. These systems typically ingest large amounts of data in frequent bursts of activity. Non-relational databases can store this information very quickly.</li>
+<li><em>Retail and marketing</em>. E.g. for storing catalog data and for event sourcing in order processing pipelines.</li>
+<li><em>Gaming</em>. Games often require single-millisecond latencies for reads and write to provide an engaging in-game experience. A game database needs to be fast and be able to handle massive spikes in request rates during new game launches and feature updates.</li>
+<li><em>Web and mobile applications</em>. A non-relational database such as Azure Cosmos DB is commonly used within web and mobile applications, and is well suited for modeling social interactions, integrating with third-party services, and for building rich personalized experiences.</li>
+</ul>
+<h3 id="describe-types-of-non-relational-data">Describe types of non-relational data</h3>
+<h4 id="what-is-semi-structured-data">What is semi-structured data?</h4>
+<p>Semi-structured data is data that contains fields. The fields don’t have to be the same in every entity. You only define the fields that you need on a per-entity basis. The data must be formatted in such a way that an application can parse and process it. One common way of doing this is to store the data for each entity as a JSON document.<br>
+Other formats you might see include <em>Avro</em>, <em>ORC</em>, and <em>Parquet</em>:</p>
+<ul>
+<li><em>Avro</em> is a row-based format. It was created by Apache. Each record contains a header that describes the structure of the data in the record.</li>
+</ul>
+<pre><code>{
+  "type": "record",
+  "name": "contact_schema",
+  "fields": [
+   {
+      "name": "id",
+      "type": "int",
+      "doc": "ID of the contact"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "doc": "Name of the contact"
+    },
+{
+      "name": "telephone",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "type": "record",
+            "name": "contact_schema.telephone",
+            "fields": [
+              {
+                "name": "phoneid",
+                "type": "int"
+              },
+              {
+                "name": "phonetype",
+                "type": [ "null", "string" ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
 
