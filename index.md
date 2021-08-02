@@ -538,7 +538,43 @@ You can use the Data Migration Assistant to detect compatibility issues with you
 <li>high availability guarantees, to ensure that your databases are available at least 99.99% of the time.</li>
 <li>Advanced threat protection provides advanced security capabilities, such as vulnerability assessments, to help detect and remediate potential security problems with your databases.</li>
 <li>Auditing tracks database events and writes them to an audit log in your Azure storage account. Auditing can help you maintain regulatory compliance, understand database activity, and gain insight into discrepancies and anomalies that might indicate business concerns or suspected security violations.</li>
-<li>SQL Database helps secure your data by providing encryption. For data in motion, it uses Transport Layer Security.<br>
-<a href="https://docs.microsoft.com/en-us/learn/modules/explore-relational-data-offerings/5-azure-sql-database-managed-instance">hier weiter</a></li>
+<li>SQL Database helps secure your data by providing encryption. For data in motion, it uses Transport Layer Security.</li>
 </ul>
+<h3 id="azure-sql-database-managed-instance">Azure SQL Database Managed Instance</h3>
+<h4 id="what-is-azure-sql-database-managed-instance">What is Azure SQL Database managed instance?</h4>
+<p>The Single Database and Elastic Pool options restrict some of the administrative features available to SQL Server. Managed instance effectively runs a fully controllable instance of SQL Server in the cloud. You can install multiple databases on the same instance. You have complete control over this instance, much as you would for an on-premises server. The Managed instance service automates backups, software patching, database monitoring, and other general tasks, but you have full control over security and resource allocation for your databases.</p>
+<p>Managed instances depend on other Azure services such as Azure Storage for backups, Azure Event Hubs for telemetry, Azure Active Directory for authentication, Azure Key Vault for Transparent Data Encryption (TDE) and a couple of Azure platform services that provide security and supportability features.</p>
+<p>All communications are encrypted and signed using certificates.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/5-azure-sql-database-graphic.png" alt="Image showing a comparison on between managed instance, Single Database, and Elastic Database"></p>
+<h4 id="use-cases-2">Use cases</h4>
+<p>Consider Azure SQL Database managed instance if you want to <em>lift-and-shift</em> an on-premises SQL Server instance and all its databases to the cloud, without incurring the management overhead of running SQL Server on a virtual machine.</p>
+<p>If your system uses features such as linked servers, Service Broker (a message processing system that can be used to distribute work across servers), or Database Mail (which enables your database to send email messages to users), then you should use managed instance. To check compatibility with an existing on-premises system, you can install <a href="https://www.microsoft.com/download/details.aspx?id=53595">Data Migration Assistant (DMA)</a>.</p>
+<h4 id="business-benefits-2">Business benefits</h4>
+<p>SQL Database managed instance provides all the management and security benefits available when using Single Database and Elastic Pool. Managed instance deployment enables a system administrator to spend less time on administrative tasks because the SQL Database service either performs them for you or greatly simplifies those tasks.</p>
+<p>Managed instance has near 100% compatibility with SQL Server Enterprise Edition, running on-premises.</p>
+<h3 id="postgresql-mariadb-and-mysql">PostgreSQL, MariaDB, and MySQL</h3>
+<p>The primary reason for these services is to enable organizations running PostgreSQL, MySQL, or MariaDB to move to Azure quickly, without making wholesale changes to their applications.</p>
+<h4 id="what-are-mysql-mariadb-and-postgresql">What are MySQL, MariaDB, and PostgreSQL</h4>
+<p>MySQL started life as a simple-to-use open-source database management system. It is the leading open source relational database for <em>Linux, Apache, MySQL, and PHP</em> (LAMP) stack apps.</p>
+<p>MariaDB is a newer database management system, created by the original developers of MySQL. The database engine has since been rewritten and optimized to improve performance.</p>
+<p>PostgreSQL is a hybrid relational-object database. You can store data in relational tables, but a PostgreSQL database also enables you to store custom data types, with their own non-relational properties. PostgreSQL has its own query language called <em>pgsql</em>.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/6-mysql-mariadb-postgresql.png" alt="Advantages of MySQL, MariaDB, and PostgreSQL"></p>
+<h4 id="what-is-azure-database-for-mysql">What is Azure Database for MySQL?</h4>
+<p>Azure Database for MySQL is a PaaS implementation of MySQL in the Azure cloud, based on the MySQL Community Edition.</p>
+<h4 id="what-is-azure-database-for-mariadb">What is Azure Database for MariaDB?</h4>
+<p>Azure Database for MariaDB is an implementation of the MariaDB database management system adapted to run in Azure. It’s based on the MariaDB Community Edition.</p>
+<h4 id="what-is-azure-database-for-postgresql">What is Azure Database for PostgreSQL?</h4>
+<p>If you prefer PostgreSQL, you can choose Azure Database for PostgreSQL to run a PaaS implementation of PostgreSQL in the Azure Cloud.</p>
+<p>Some features of on-premises PostgreSQL databases are not available in Azure Database for PostgreSQL. These features are mainly concerned with the extensions that users can add to a database to perform specialized tasks, such as writing stored procedures in various programming languages (other than pgsql, which is available), and interacting directly with the operating system.</p>
+<h5 id="azure-database-for-postgresql-single-server">Azure Database for PostgreSQL single-server</h5>
+<p>The single-server deployment option for PostgreSQL provides similar benefits as Azure Database for MySQL. You choose from three pricing tiers: Basic, General Purpose, and Memory Optimized. Each tier supports different numbers of CPUs, memory, and storage sizes—you select one based on the load you expect to support.</p>
+<h5 id="azure-database-for-postgresql-hyperscale-citus">Azure Database for PostgreSQL Hyperscale (Citus)</h5>
+<p>Hyperscale (Citus) is a deployment option that scales queries across multiple server nodes to support large database loads. Your database is split across nodes. Data is split into chunks based on the value of a partition key or sharding key. Consider using this deployment option for the largest database PostgreSQL deployments in the Azure Cloud.</p>
+<h5 id="benefits-of-azure-database-for-postgresql">Benefits of Azure Database for PostgreSQL</h5>
+<p>Azure Database for PostgreSQL is a highly available service. It contains built-in failure detection and failover mechanisms.</p>
+<p>Users of PostgreSQL will be familiar with the <strong>pgAdmin</strong> tool, which you can use to manage and monitor a PostgreSQL database. You can continue to use this tool to connect to Azure Database for PostgreSQL. However, some server-focused functionality, such as performing server backup and restore, are not available because the server is managed and maintained by Microsoft.</p>
+<p>Azure Database for PostgreSQL servers records information about the queries run against databases on the server, and saves them in a database named <em>azure_sys</em>.</p>
+<h4 id="migrate-data-to-azure">Migrate data to Azure</h4>
+<p>If you have existing MySQL, MariaDB, or PostgreSQL databases running on premises, and you want to move the data to a database running the corresponding data services in Azure, you can use the <a href="https://docs.microsoft.com/en-us/azure/dms/tutorial-postgresql-azure-postgresql-online">Azure Database Migration Service (DMS)</a>.</p>
+<p><a href="https://docs.microsoft.com/de-de/learn/modules/explore-provision-deploy-relational-database-offerings-azure/">hier weiter</a></p>
 
