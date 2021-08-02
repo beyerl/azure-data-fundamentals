@@ -577,4 +577,256 @@ You can use the Data Migration Assistant to detect compatibility issues with you
 <h4 id="migrate-data-to-azure">Migrate data to Azure</h4>
 <p>If you have existing MySQL, MariaDB, or PostgreSQL databases running on premises, and you want to move the data to a database running the corresponding data services in Azure, you can use the <a href="https://docs.microsoft.com/en-us/azure/dms/tutorial-postgresql-azure-postgresql-online">Azure Database Migration Service (DMS)</a>.</p>
 <p><a href="https://docs.microsoft.com/de-de/learn/modules/explore-provision-deploy-relational-database-offerings-azure/">hier weiter</a></p>
+<h2 id="explore-provisioning-and-deploying-relational-database-services-in-azure">Explore provisioning and deploying relational database services in Azure</h2>
+<h3 id="describe-provisioning-relational-data-services">Describe provisioning relational data services</h3>
+<h4 id="what-is-provisioning">What is provisioning?</h4>
+<p>Provisioning is the act of running series of tasks that a service provider, such as Azure SQL Database, performs to create and configure a service. Behind the scenes, the service provider will set up the various resources (disks, memory, CPUs, networks, and so on) required to run the service. How the service provider provisions resources is opaque, and you don’t need to be concerned with how this process works.<br>
+All you do is specify parameters that determine the size of the resources required (how much disk space, memory, computing power, and network bandwidth). These parameters are determined by estimating the size of the workload that you intend to run using the service.<br>
+In many cases, you can modify these parameters after the service has been created, perhaps increasing the amount of storage space or memory if the workload is greater than you initially anticipated. The act of increasing (or decreasing) the resources used by a service is called <em>scaling</em>.</p>
+<p>Azure provides several tools you can use to provision services:</p>
+<ul>
+<li><em>The Azure portal</em>.</li>
+<li><em>The Azure command-line interface (CLI)</em></li>
+<li><em>Azure PowerShell</em>.</li>
+<li><em>Azure Resource Manager templates</em>.</li>
+</ul>
+<h3 id="describe-provisioning-postgresql-and-mysql">Describe provisioning PostgreSQL and MySQL</h3>
+<h4 id="how-to-provision-azure-database-for-postgresql-and-azure-database-for-mysql">How to provision Azure Database for PostgreSQL and Azure Database for MySQL</h4>
+<p>As with Azure SQL Database, you can provision a PostgreSQL or MySQL database interactively using the Azure portal. The processes for provisioning Azure Database for PostgreSQL and Azure Database for MySQL are very similar.<br>
+PostgreSQL also gives you the hyperscale option, which supports ultra-high performance workloads. The hyperscale deployment option supports:</p>
+<ul>
+<li>Horizontal scaling across multiple machines.</li>
+<li>Query parallelization across these servers. The service can split resource intensive queries into pieces which can be run in parallel on the different servers. The results from each server are aggregated back together to produce a final result. This mechanism can deliver faster responses on queries over large datasets.</li>
+<li>Excellent support for multi-tenant applications, real time operational analytics, and high throughput transactional workloads</li>
+</ul>
+<p>You can select between three pricing tiers, each of which is designed to support different workloads:</p>
+<ul>
+<li>
+<p><strong>Basic</strong>. This tier is suitable for workloads that require light compute and I/O performance. Examples include servers used for development or testing or small-scale, infrequently used applications.</p>
+</li>
+<li>
+<p><strong>General Purpose</strong>. Use this pricing tier for business workloads that require balanced compute and memory with scalable I/O throughput. Examples include servers for hosting web and mobile apps and other enterprise applications.</p>
+</li>
+<li>
+<p><strong>Memory Optimized</strong> This tier supports high-performance database workloads that require in-memory performance for faster transaction processing and higher concurrency. Examples include servers for processing real-time data and high-performance transactional or analytical apps.</p>
+</li>
+</ul>
+<p>The <strong>Configure</strong> page displays the performance that General Purpose and Memory Optimized configurations provide in terms of <strong>IOPS</strong>. IOPS is an acronym for <em>Input/Output Operations per seconds</em>, and is a measure of the read and write capacity available using the configured resources.</p>
+<h3 id="describe-configuring-relational-data-services">Describe configuring relational data services</h3>
+<p>After you’ve provisioned a resource, you’ll often need to configure it to meet the needs of your applications and environment. For example, you might need to set up network access, or open a firewall port to enable your applications to connect to the resource.</p>
+<h4 id="configure-connectivity-and-firewalls">Configure connectivity and firewalls</h4>
+<p>The default connectivity for Azure relational data services is to disable access to the world.</p>
+<h5 id="configure-connectivity-to-virtual-networks-and-on-premises-computers">Configure connectivity to virtual networks and on-premises computers</h5>
+<p>To enable connectivity, use the <strong>Firewalls and virtual networks</strong> page for a service. To enable connectivity, choose <strong>Selected networks</strong>. In the <strong>Virtual networks</strong> section, you can specify which virtual networks are allowed to route traffic to the service.</p>
+<p>Azure SQL Database communicates over port 1433.</p>
+<h5 id="configure-connectivity-from-private-endpoints.">Configure connectivity from private endpoints.</h5>
+<p><strong>Azure Private Endpoint</strong> is a network interface that connects you privately and securely to a service powered by Azure Private Link. Private Endpoint uses a private IP address from your virtual network, effectively bringing the service into your virtual network.</p>
+<h4 id="configure-authentication">Configure authentication</h4>
+<p>With Azure Active Directory (AD) authentication, you can centrally manage the identities of database users and other Microsoft services in one central location. Central ID management provides a single place to manage database users and simplifies permission management.</p>
+<h4 id="configure-access-control">Configure access control</h4>
+<p>Azure AD enables you to specify who, or what, can access your resources. Access control defines what a user or application can do with your resources once they’ve been authenticated. Azure role-based access control (Azure RBAC) helps you manage who has access to Azure resources, and what they can do with those resources.</p>
+<p>You control access to resources using Azure RBAC to create role assignments. A role assignment consists of three elements: a security principal, a role definition, and a scope.</p>
+<ul>
+<li>
+<p>A <strong>security principal</strong> is an object that represents a user, group, service principal, or managed identity that is requesting access to Azure resources.</p>
+</li>
+<li>
+<p>A <strong>role definition</strong>, often abbreviated to <em>role</em>, is a collection of permissions. Azure includes several built-in roles that you can use, including:</p>
+<ul>
+<li>
+<p><strong>Owner</strong> - Has full access to all resources including the right to delegate access to others.</p>
+</li>
+<li>
+<p><strong>Contributor</strong> - Can create and manage all types of Azure resources but can’t grant access to others.</p>
+</li>
+<li>
+<p><strong>Reader</strong>- Can view existing Azure resources.</p>
+</li>
+<li>
+<p><strong>User Access Administrator</strong> - Lets you manage user access to Azure resources.</p>
+</li>
+</ul>
+<p>You can also create your own custom roles.</p>
+</li>
+<li>
+<p>A <strong>scope</strong> lists the set of resources that the access applies to.</p>
+</li>
+</ul>
+<p>You add role assignments to a resource in the Azure portal using the <strong>Access control (IAM)</strong> page.</p>
+<h4 id="configure-advanced-data-security">Configure advanced data security</h4>
+<p>Advanced data security implements threat protection and assessment. Threat protection adds security intelligence to your service. This intelligence monitors the service and detects unusual patterns of activity that could be harmful, or compromise the data managed by the service. Assessment identifies potential security vulnerabilities and recommends actions to mitigate them.</p>
+<h3 id="describe-configuring-azure-sql-database-azure-database-for-postgresql-and-azure-database-for-mysql">Describe configuring Azure SQL Database, Azure Database for PostgreSQL, and Azure Database for MySQL</h3>
+<h4 id="configure-azure-sql-database">Configure Azure SQL Database</h4>
+<p>The overarching principle for network security of the Azure SQL Database offering is to allow only the connection and communication that is necessary to allow the service to operate. All other ports, protocols, and connections are blocked by default. Virtual local area networks (VLANs) and access control lists (ACLs) are used to restrict network communications by source and destination networks, protocols, and port numbers. An ACL contains a list of resources, and the objects (users, computers, and applications) that are allowed to access those resources. Items that implement network-based ACLs include routers and load balancers.</p>
+<p>The following steps describe how a connection is established to an Azure SQL database:</p>
+<ul>
+<li>
+<p>Clients connect to a <em>gateway</em> that has a public IP address and listens on port 1433.</p>
+</li>
+<li>
+<p>Depending on the effective connection policy, the gateway either redirects traffic to the database cluster, or acts as a proxy for the database cluster.</p>
+</li>
+<li>
+<p>Inside the database cluster, traffic is forwarded to the appropriate Azure SQL database.</p>
+</li>
+</ul>
+<h5 id="connectivity-from-within-azure">Connectivity from within Azure</h5>
+<p>If you’re connecting from within another Azure service, such as a web application running under Azure App Service, your connections have a connection policy of Redirect by default. A policy of Redirect means that after your application establishes a connection to the Azure SQL database through the gateway, all following requests from your application will go directly to the database rather than through the gateway. If connectivity to the database subsequently fails, your application will have to reconnect through the gateway, when it might be directed to a different copy of the database running on another server in the cluster.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-provision-deploy-relational-database-offerings-azure/media/6-redirect.png" alt="Image showing client requests being redirected by the gateway"></p>
+<h5 id="connectivity-from-outside-of-azure">Connectivity from outside of Azure</h5>
+<p>If you’re connecting from outside Azure, such as an on-premises application, your connections have a connection policy of Proxy by default. A policy of Proxy means the connection is established via the gateway, and all subsequent requests flow through the gateway. Each request could (potentially) be serviced by a different database in the cluster.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-provision-deploy-relational-database-offerings-azure/media/6-proxy.png" alt="Image showing the gateway acting as a proxy for different database servers"></p>
+<h5 id="configure-dosguard">Configure DoSGuard</h5>
+<p>Denial of service (DoS) attacks are reduced by a SQL Database gateway service called DoSGuard. DoSGuard actively tracks failed logins from IP addresses. If there are multiple failed logins from a specific IP address within a period of time, the IP address is blocked from accessing any resources in the service for a short while.</p>
+<h2 id="configure-azure-database-for-postgresql">Configure Azure Database for PostgreSQL</h2>
+<p>When you create your Azure Database for PostgreSQL server, a default database named <em>postgres</em> is created. To connect to your database server, you need your full server name and admin sign-in credentials.</p>
+<p>Connections to your Azure Database for PostgreSQL server communicate over port 5432.</p>
+<h5 id="configure-server-parameters-and-extensions">Configure server parameters and extensions</h5>
+<p>A PostgreSQL database server has a number of configuration parameters that you can set. These parameters support fine-tuning of the database, and debugging of code in the database. You can modify these parameters using the <strong>Server parameters</strong> page in the Azure portal. If you’re familiar with PostgreSQL, you’ll find that not all parameters are supported in Azure. Also, not all PostgreSQL extensions are supported in Azure.</p>
+<h5 id="configure-read-replicas">Configure read replicas</h5>
+<p>You can replicate data from an Azure Database for PostgreSQL server to a read-only server. Azure Database for PostgreSQL supports replication from the master server to up to five replicas. Replicas are updated asynchronously with the PostgreSQL engine native replication technology.</p>
+<p>Read replicas help to improve the performance and scale of read-intensive workloads. Read workloads can be isolated to the replicas, while write workloads can be directed to the master.</p>
+<p>A common scenario is to have BI and analytical workloads use read replicas as the data source for reporting.</p>
+<h4 id="configure-azure-database-for-mysql">Configure Azure Database for MySQL</h4>
+<p>In order to connect to the MySQL database you’ve provisioned, you’ll need to enter the connection information. This information includes fully qualified server name and sign-in credentials.</p>
+<p>Connections to your Azure Database for MySQL server communicate over port 3306.</p>
+<p>By default, SSL connection security is required and enforced on your Azure Database for MySQL server.</p>
+<h5 id="configure-server-parameters">Configure server parameters</h5>
+<p>Like PostgreSQL, a MySQL database server has a number of configuration parameters that you can set. You can modify these parameters using the <strong>Server parameters</strong> page in the Azure portal.</p>
+<h5 id="configure-read-replicas-1">Configure read replicas</h5>
+<p>This feature is similar to that available for PostgreSQL. You can create up to five read replicas for a MySQL database.</p>
+<h2 id="query-relational-data-in-azure">Query relational data in Azure</h2>
+<h3 id="introduction-to-sql">Introduction to SQL</h3>
+<p>SQL stands for Structured Query Language. SQL is used to communicate with a relational database. It’s the standard language for relational database management systems.</p>
+<p>SQL was originally standardized by the American National Standards Institute (ANSI) in 1986, and by the International Organization for Standardization (ISO) in 1987. Since then, the standard has been extended several times as relational database vendors have added new features to their systems.</p>
+<h4 id="understand-sql-dialects">Understand SQL dialects</h4>
+<p>You can use SQL statements such as <strong>SELECT</strong>, <strong>INSERT</strong>, <strong>UPDATE</strong>, <strong>DELETE</strong>, <strong>CREATE</strong>, and <strong>DROP</strong> to accomplish almost everything that one needs to do with a database. lthough these SQL statements are part of the SQL standard, many database management systems also have their own additional proprietary extensions to handle the specifics of that database management system. These extensions provide functionality not covered by the SQL standard, and include areas such as security management and programmability.</p>
+<p>Some popular dialects of SQL include:</p>
+<ul>
+<li>
+<p><em>Transact-SQL (T-SQL)</em>. This version of SQL is used by Microsoft SQL Server and Azure SQL Database.</p>
+</li>
+<li>
+<p><em>pgSQL</em>. This is the dialect, with extensions implemented in PostgreSQL.</p>
+</li>
+<li>
+<p><em>PL/SQL</em>. This is the dialect used by Oracle. PL/SQL stands for Procedural Language/SQL.</p>
+</li>
+</ul>
+<h4 id="understand-sql-statement-types">Understand SQL statement types</h4>
+<p>SQL statements are grouped into two main logical groups, and they are:</p>
+<ul>
+<li>Data Manipulation Language (DML)</li>
+<li>Data Definition Language (DDL)</li>
+</ul>
+<h5 id="use-dml-statements">Use DML statements</h5>
+<p>You use DML statements to manipulate the rows in a relational table.</p>
+
+<table>
+<thead>
+<tr>
+<th>Statement</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT</td>
+<td>Select/Read rows from a table</td>
+</tr>
+<tr>
+<td>INSERT</td>
+<td>Insert new rows into a table</td>
+</tr>
+<tr>
+<td>UPDATE</td>
+<td>Edit/Update existing rows</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>Delete existing rows in a table</td>
+</tr>
+</tbody>
+</table><p>The basic form of an <strong>INSERT</strong> statement will insert one row at a time. By default, the <strong>SELECT</strong>, <strong>UPDATE</strong>, and <strong>DELETE</strong> statements are applied to every row in a table. You usually apply a <strong>WHERE</strong> clause with these statements to specify criteria; only rows that match these criteria will be selected, updated, or deleted.</p>
+<p>The <strong>FROM</strong> clause specifies the table to use.</p>
+<p>If you want to sort the data, you can add an <strong>ORDER BY</strong> clause.</p>
+<p>You can also run SELECT statements that retrieve data from multiple tables using a <strong>JOIN</strong> clause.</p>
+<p>A number of aggregate functions are available:</p>
+<ul>
+<li>MIN (which returns the smallest value in a column)</li>
+<li>MAX (which returns the largest value in a column)</li>
+<li>AVG (which returns the average value, but only if the column contains numeric data),</li>
+<li>SUM (which returns the sum of all the values in the column, but only if the column is numeric).</li>
+</ul>
+<h3 id="use-ddl-statements">Use DDL statements</h3>
+<p>You use DDL statements to create, modify, and remove tables and other objects in a database (table, stored procedures, views, and so on).</p>
+
+<table>
+<thead>
+<tr>
+<th>Statement</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CREATE</td>
+<td>Create a new object in the database, such as a table or a view.</td>
+</tr>
+<tr>
+<td>ALTER</td>
+<td>Modify the structure of an object. For instance, altering a table to add a new column.</td>
+</tr>
+<tr>
+<td>DROP</td>
+<td>Remove an object from the database.</td>
+</tr>
+<tr>
+<td>RENAME</td>
+<td>Rename an existing object.</td>
+</tr>
+</tbody>
+</table><p>The following example creates a new database table. The items between the parentheses specify the details of each column, including the name, the data type, whether the column must always contain a value (NOT NULL), and whether the data in the column is used to uniquely identify a row (PRIMARY KEY). Each table should have a primary key, although SQL doesn’t enforce this rule.</p>
+<p>Most database management systems support numeric datatypes such as INT (an integer, or whole number), and string types such as VARCHAR (<em>VARCHAR</em> stands for variable length character data).</p>
+<h3 id="query-relational-data-in-azure-sql-database">Query relational data in Azure SQL Database</h3>
+<h4 id="retrieve-connection-information-for-azure-sql-database">Retrieve connection information for Azure SQL Database</h4>
+<p>You can use any of these tools to query data held in Azure SQL Database:</p>
+<ul>
+<li>The query editor in the Azure portal</li>
+<li>The <code>sqlcmd</code> utility from the command line or the Azure Cloud Shell</li>
+<li>SQL Server Management Studio</li>
+<li>Azure Data Studio</li>
+<li>SQL Server Data Tools</li>
+</ul>
+<p>To use these tools, you first need to establish a connection to the database. Some tools and applications require a connection string that identifies the server, database, account name, and password. You can find this information from the <strong>Overview</strong> page for a database in the Azure portal: select <strong>Show database connection strings</strong>.</p>
+<h4 id="use-the-azure-portal-to-query-a-database">Use the Azure portal to query a database</h4>
+<p>To access the query editor in the Azure portal, go to the page for your database and select <strong>Query editor</strong>. You’ll be prompted for credentials. You can set the <strong>Authorization type</strong> to <strong>SQL Server authentication</strong> and enter the user name and password that you set up when you created the database. Or you can select <strong>Active Directory password authentication</strong> and provide the credentials of an authorized user in Azure Active Directory.</p>
+<h4 id="use-sqlcmd-to-query-a-database">Use SQLCMD to query a database</h4>
+<p>The <code>sqlcmd</code> utility runs from the command line and is also available in the Cloud Shell. You specify parameters that identify the server, database, and your credentials.</p>
+<pre><code>sqlcmd -S &lt;server&gt;.database.windows.net -d &lt;database&gt; -U &lt;username&gt; -P &lt;password&gt;
+</code></pre>
+<h4 id="use-azure-data-studio">Use Azure Data Studio</h4>
+<p>Azure Data Studio is a graphical utility for creating and running SQL queries from your desktop.</p>
+<h4 id="use-sql-server-management-studio">Use SQL Server Management Studio</h4>
+<p>SQL Server Management Studio is another tool that you can download and run on your desktop.</p>
+<h4 id="use-sql-server-data-tools-in-visual-studio">Use SQL Server Data Tools in Visual Studio</h4>
+<p>Visual Studio is a popular development tool for building applications. It’s available in several editions. SQL Server Data Tools are available from the <strong>Tools</strong> menu in Visual Studio.</p>
+<h3 id="query-relational-data-in-azure-database-for-postgresql">Query relational data in Azure Database for PostgreSQL</h3>
+<p>PostgreSQL provides many tools you can use to connect to a PostgreSQL database and run queries. These tools include the <strong>pgAdmin</strong> graphical user interface, and the <strong>psql</strong> command-line utility.</p>
+<h4 id="retrieve-connection-information-for-azure-database-for-postgresql">Retrieve connection information for Azure Database for PostgreSQL</h4>
+<p>To connect to a PostgreSQL database, you require the name of the server, and the credentials for an account that has access rights to connect to the server. You can find the server name and the name of the default administrator account on the <strong>Overview</strong> page for the Azure Database for PostgreSQL instance in the Azure portal. Contact your administrator for the password.</p>
+<p>As with Azure SQL Database, you must open the PostgreSQL firewall to enable client applications to connect to the service.</p>
+<h4 id="use-psql-to-query-a-database">Use psql to query a database</h4>
+<p>The <strong>psql</strong> utility is available in the Azure Cloud Shell. You can also run it from a command prompt on your desktop computer, but you must download and install the psql client.</p>
+<h4 id="connect-to-postgresql-database-using-azure-data-studio">Connect to PostgreSQL database using Azure Data Studio</h4>
+<p>To connect to Azure Database for PostgreSQL from Azure Data Studio, you must first install the PostgreSQL extension.</p>
+<h3 id="query-relational-data-in-azure-database-for-mysql">Query relational data in Azure Database for MySQL</h3>
+<p>As with PostgreSQL, there are many tools available to connect to MySQL that enable you to create and run scripts of SQL commands. You can use the <strong>mysql</strong> command-line utility, which is also available in the Azure Cloud Shell, or you can use graphical tools from the desktop such as MySQL Workbench.</p>
+<p>Currently there are no extensions available for connecting to MySQL from Azure Data Studio.</p>
+<h4 id="retrieve-connection-information-for-azure-database-for-mysql">Retrieve connection information for Azure Database for MySQL</h4>
+<p>Like SQL Database and PostgreSQL, you require the name of the server, and the credentials for an account that has access rights to connect to the server. You can find the server name and the name of the default administrator account on the <strong>Overview</strong> page for the Azure Database for MySQL instance in the Azure portal. Contact your administrator for the password.</p>
+<p>You must also open the MySQL firewall to enable client applications to connect to the service.</p>
+<h4 id="use-mysql-workbench-to-query-a-database">Use MySQL Workbench to query a database</h4>
+<p>You can download and install MySQL Workbench from the MySQL Community Downloads page.</p>
+<p><a href="https://docs.microsoft.com/en-us/learn/paths/azure-data-fundamentals-explore-non-relational-data/">hier weiter</a></p>
 
