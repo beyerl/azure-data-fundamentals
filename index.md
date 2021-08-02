@@ -576,7 +576,6 @@ You can use the Data Migration Assistant to detect compatibility issues with you
 <p>Azure Database for PostgreSQL servers records information about the queries run against databases on the server, and saves them in a database named <em>azure_sys</em>.</p>
 <h4 id="migrate-data-to-azure">Migrate data to Azure</h4>
 <p>If you have existing MySQL, MariaDB, or PostgreSQL databases running on premises, and you want to move the data to a database running the corresponding data services in Azure, you can use the <a href="https://docs.microsoft.com/en-us/azure/dms/tutorial-postgresql-azure-postgresql-online">Azure Database Migration Service (DMS)</a>.</p>
-<p><a href="https://docs.microsoft.com/de-de/learn/modules/explore-provision-deploy-relational-database-offerings-azure/">hier weiter</a></p>
 <h2 id="explore-provisioning-and-deploying-relational-database-services-in-azure">Explore provisioning and deploying relational database services in Azure</h2>
 <h3 id="describe-provisioning-relational-data-services">Describe provisioning relational data services</h3>
 <h4 id="what-is-provisioning">What is provisioning?</h4>
