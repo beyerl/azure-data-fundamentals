@@ -475,5 +475,70 @@ Examples of descriptive analytics include generating reports to provide a view o
 <h4 id="cognitive-analytics">Cognitive analytics</h4>
 <p>Cognitive analytics attempts to draw inferences from existing data and patterns, derive conclusions based on existing knowledge bases, and then add these findings back into the knowledge base for future inferences–a self-learning feedback loop. Cognitive analytics helps you to learn what might happen if circumstances change, and how you might handle these situations.<br>
 Effective cognitive analytics depends on machine learning algorithms. It uses several NLP (Natural Language Processing) concepts to make sense of previously untapped data sources, such as call center conversation logs and product reviews.</p>
-<p><a href="https://docs.microsoft.com/de-de/learn/paths/azure-data-fundamentals-explore-relational-data/">hier weiter</a></p>
+<h2 id="azure-data-fundamentals-explore-relational-data-in-azure"># Azure Data Fundamentals: Explore relational data in Azure</h2>
+<h3 id="explore-relational-data-services-in-azure">Explore relational data services in Azure</h3>
+<p>Azure offers a range of options for running a database management system in the cloud. For example, you can migrate your on-premises systems to a collection of Azure virtual machines. This approach still requires that you manage your database management system (DBMS) carefully. Alternatively, you can take advantage of the various Azure relational data services available. These data services manage the DBMS for you, leaving you free to concentrate on the data they contain and the applications that use them.</p>
+<h4 id="understand-iaas-paas-and-saas">Understand IaaS, PaaS, and SaaS</h4>
+<p><strong>IaaS</strong> is an acronym for <em>Infrastructure-as-a-Service</em>. Azure enables you to create a virtual infrastructure in the cloud that mirrors the way an on-premises data center might work.<br>
+<strong>PaaS</strong> stands for <em>Platform-as-a-service</em>. Rather than creating a virtual infrastructure, and installing and managing the database software yourself, a PaaS solution does this for you.<br>
+<strong>SaaS</strong> is short for <em>Software-as-a-Service</em>. SaaS services are typically specific software packages that are installed and run on virtual hardware in the cloud. SaaS packages are typically hosted applications rather than more generalized software such as a DBMS.<br>
+<img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/2-saas-paas-iaas.png" alt="IaaS, PaaS, and Saas"></p>
+<h3 id="what-are-azure-data-services">What are Azure Data Services?</h3>
+<p>Azure Data Services fall into the PaaS category. These services are a series of DBMSs managed by Microsoft in the cloud.</p>
+<p>Azure Data Services are available for several common relational database management systems. The most well-known service is Azure SQL Database. The others currently available are Azure Database for MySQL servers, Azure Database for MariaDB servers, and Azure Database for PostgreSQL servers.</p>
+<p>Using Azure Data Services reduces the amount of time that you need to invest to administer a DBMS. However, these services can also limit the range of custom administration tasks that you can perform, because manually performing some tasks might risk compromising the way in which the service runs. If you need more control than Azure Data Services allow, you can install your database management system on a virtual machine that runs in Azure.</p>
+<p>Apart from reducing the administrative workload, Azure Data Services ensure that your databases are available for at least 99.99% of the time. Additionally, these services are designed to be <em>always on</em>. This means that you can’t shut down a database and restart it later.</p>
+<h3 id="sql-server-on-azure-virtual-machines">SQL Server on Azure virtual machines</h3>
+<p>Microsoft SQL Server is a popular relational DBMS. It has a long history, and has features that provide database management to organizations of all sizes.</p>
+<h4 id="what-is-sql-server-on-azure-virtual-machines">What is SQL Server on Azure Virtual Machines?</h4>
+<p>SQL Server on Virtual Machines enables you to use full versions of SQL Server in the Cloud without having to manage any on-premises hardware. This is an example of the IaaS approach.</p>
+<p>SQL Server running on an Azure virtual machine effectively replicates the database running on real on-premises hardware. Migrating from the system running on-premises to an Azure virtual machine is no different than moving the databases from one on-premises server to another.</p>
+<p>This approach is suitable for migrations and applications requiring access to operating system features that might be unsupported at the PaaS level. SQL virtual machines are <em>lift-and-shift</em> ready for existing applications that require fast migration to the cloud with minimal changes. The term <em>lift-and-shift</em> refers to the way in which you can move a database directly from an on-premises server to an Azure virtual machine without requiring that you make any changes to it.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/3-sql-server-azure-virtual-machine.png" alt="Diagram illustrating the lift-and-shift approach to migrating SQL Server running on-premises to a virtual machine in Azure"></p>
+<h3 id="use-cases">Use cases</h3>
+<p>This approach is optimized for migrating existing applications to Azure, or extending existing on-premises applications to the cloud in hybrid deployments. A <em>hybrid deployment</em> is a system where part of the operation runs on-premises, and part in the cloud.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/3-hybrid-solution.png" alt="Image depicting a hybrid deployment"><br>
+You can use SQL Server in a virtual machine to develop and test traditional SQL Server applications.</p>
+<p>These capabilities enable you to:</p>
+<ul>
+<li>Create rapid development and test scenarios when you do not want to buy on-premises non-production SQL Server hardware.</li>
+<li>Become lift-and-shift ready for existing applications that require fast migration to the cloud with minimal changes or no changes.</li>
+<li>Scale up the platform on which SQL Server is running, by allocating more memory, CPU power, and disk space to the virtual machine.</li>
+</ul>
+<h5 id="business-benefits">Business benefits</h5>
+<p>Running SQL Server on virtual machines allows you to meet unique and diverse business needs through a combination of on-premises and cloud-hosted deployments, while using the same set of server products, development tools, and expertise across these environments.</p>
+<h3 id="azure-sql-database">Azure SQL Database</h3>
+<h4 id="what-is-azure-sql-database">What is Azure SQL Database?</h4>
+<p>Azure SQL Database is a PaaS offering from Microsoft. You create a managed database server in the cloud, and then deploy your databases on this server. A SQL Database server is a logical construct that acts as a central administrative point for multiple single or pooled databases, logins, firewall rules, auditing rules, threat detection policies, and failover groups. Azure SQL Database is available with several options: <em>Single Database</em>, <em>Elastic Pool</em>, and <em>Managed Instance</em>.</p>
+<h5 id="single-database">Single Database</h5>
+<p>This option enables you to quickly set up and run a single SQL Server database. You create and run a database server in the cloud, and you access your database through this server.</p>
+<ul>
+<li>Microsoft manages the server, so all you have to do is configure the database, create your tables, and populate them with your data.</li>
+<li>You can scale the database if you need additional storage space, memory, or processing power.</li>
+<li>By default, resources are pre-allocated, and you’re charged per hour for the resources you’ve requested.</li>
+<li>You can also specify a <em>serverless</em> configuration. In this configuration, Microsoft creates its own server, which might be shared by a number of databases belonging to other Azure subscribers.</li>
+</ul>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/4-single-database.png" alt="Image showing the resources managed by Azure SQL Database using the Single Database deployment option"></p>
+<h5 id="elastic-pool">Elastic Pool</h5>
+<p>This option is similar to <em>Single Database</em>, except that by default multiple databases can share the same resources, such as memory, data storage space, and processing power through multiple-tenancy. The resources are referred to as a <em>pool</em>. This model is useful if you have databases with resource requirements that vary over time, and can help you to reduce costs.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-relational-data-offerings/media/4-elastic-pool.png" alt="Image showing the resources managed by Azure SQL Database using the Elastic Pool deployment option"></p>
+<h4 id="use-cases-1">Use cases</h4>
+<p>Azure SQL Database gives you the best option for low cost with minimal administration. It is not fully compatible with on-premises SQL Server installations. It is often used in new cloud projects where the application design can accommodate any required changes to your applications.<br>
+You can use the Data Migration Assistant to detect compatibility issues with your databases that can impact database functionality in Azure SQL Database.</p>
+<p>Azure SQL Database is often used for:</p>
+<ul>
+<li>Modern cloud applications that need to use the latest stable SQL Server features.</li>
+<li>Applications that require high availability.</li>
+<li>Systems with a variable load, that need the database server to scale up and down quickly.</li>
+</ul>
+<h4 id="business-benefits-1">Business benefits</h4>
+<ul>
+<li>automatical update</li>
+<li>scalability</li>
+<li>high availability guarantees, to ensure that your databases are available at least 99.99% of the time.</li>
+<li>Advanced threat protection provides advanced security capabilities, such as vulnerability assessments, to help detect and remediate potential security problems with your databases.</li>
+<li>Auditing tracks database events and writes them to an audit log in your Azure storage account. Auditing can help you maintain regulatory compliance, understand database activity, and gain insight into discrepancies and anomalies that might indicate business concerns or suspected security violations.</li>
+<li>SQL Database helps secure your data by providing encryption. For data in motion, it uses Transport Layer Security.<br>
+<a href="https://docs.microsoft.com/en-us/learn/modules/explore-relational-data-offerings/5-azure-sql-database-managed-instance">hier weiter</a></li>
+</ul>
 
