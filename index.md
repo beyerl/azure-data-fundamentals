@@ -827,5 +827,154 @@ PostgreSQL also gives you the hyperscale option, which supports ultra-high perfo
 <p>You must also open the MySQL firewall to enable client applications to connect to the service.</p>
 <h4 id="use-mysql-workbench-to-query-a-database">Use MySQL Workbench to query a database</h4>
 <p>You can download and install MySQL Workbench from the MySQL Community Downloads page.</p>
-<p><a href="https://docs.microsoft.com/en-us/learn/paths/azure-data-fundamentals-explore-non-relational-data/">hier weiter</a></p>
+<h2 id="explore-non-relational-data-offerings-in-azure">Explore non-relational data offerings in Azure</h2>
+<h3 id="explore-azure-table-storage">Explore Azure Table storage</h3>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-non-relational-data-offerings-azure/media/2-key-value-store.png" alt="Image showing the structure of a key-value store"></p>
+<h4 id="what-is-azure-table-storage">What is Azure Table Storage?</h4>
+<p>Azure Table Storage is a scalable key-value store held in the cloud.</p>
+<p>Azure Table Storage implements the NoSQL key-value model. In this model, the data for an item is stored as a set of fields, and the item is identified by a unique key.</p>
+<p>An Azure table enables you to store semi-structured data. All rows in a table must have a key, but apart from that the columns in each row can vary. Unlike traditional relational databases, Azure Table Storage tables have no concept of relationships, stored procedures, secondary indexes, or foreign keys. Data will usually be denormalized, with each row holding the entire data for a logical entity.</p>
+<p>Using Azure Table Storage can provide much faster access to the details of a customer in some scenarios because the data is available in a single row, without requiring that you perform joins across relationships.</p>
+<p>To help ensure fast access, Azure Table Storage splits a table into partitions. Partitioning is a mechanism for grouping related rows, based on a common property or <em>partition key</em>. Rows that share the same partition key will be stored together. Partitioning not only helps to organize data, it can also improve scalability and performance:</p>
+<ul>
+<li>
+<p>Partitions are independent from each other, and can grow or shrink as rows are added to, or removed from, a partition. A table can contain any number of partitions.</p>
+</li>
+<li>
+<p>When you search for data, you can include the partition key in the search criteria. This helps to narrow down the volume of data to be examined, and improves performance by reducing the amount of I/O (reads and writes) needed to locate the data.</p>
+</li>
+</ul>
+<p>The key in an Azure Table Storage table comprises two elements; the partition key that identifies the partition containing the row (as described above), and a row key that is unique to each row in the same partition. Items in the same partition are stored in row key order.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-non-relational-data-offerings-azure/media/2-table-partitions.png" alt="Image showing how a table is organized into a set of partitions"><br>
+This scheme enables an application to quickly perform <em>Point queries</em> that identify a single row, and <em>Range queries</em> that fetch a contiguous block of rows in a partition.</p>
+<h4 id="use-cases-and-management-benefits-of-using-azure-table-storage">Use cases and management benefits of using Azure Table Storage</h4>
+<p>The primary advantages of using Azure Table Storage tables over other ways of storing data include:</p>
+<ul>
+<li>It’s simpler to scale. It takes the same time to insert data in an empty table, or a table with billions of entries. An Azure storage account can hold up to 5 PB of data.</li>
+<li>A table can hold semi-structured data</li>
+<li>There’s no need to map and maintain the complex relationships typically required by a normalized relational database.</li>
+<li>Row insertion is fast</li>
+<li>Data retrieval is fast, if you specify the partition and row keys as query criteria</li>
+</ul>
+<p>There are disadvantages to storing data this way though, including:</p>
+<ul>
+<li>Consistency needs to be given consideration as transactional updates across multiple entities aren’t guaranteed</li>
+<li>There’s no referential integrity; any relationships between rows need to be maintained externally to the table</li>
+<li>It’s difficult to filter and sort on non-key data. Queries that search based on non-key fields could result in full table scans</li>
+</ul>
+<p>Azure Table Storage is an excellent mechanism for:</p>
+<ul>
+<li>Storing TBs of structured data capable of serving web scale applications.</li>
+<li>Storing datasets that don’t require complex joins, foreign keys, or stored procedures, and that can be denormalized for fast access.</li>
+<li>Capturing event logging and performance monitoring data.</li>
+</ul>
+<p>Azure Table Storage is intended to support very large volumes of data, up to several hundred TBs in size.</p>
+<p>Azure Table Storage provides high-availability guarantees in a single region. The data for each table is replicated three times within an Azure region. For increased availability, but at additional cost, you can create tables in geo-redundant storage.</p>
+<p>You can configure security and role-based access control to ensure that only the people or applications that need to see your data can actually retrieve it.</p>
+<h3 id="explore-azure-blob-storage">Explore Azure Blob storage</h3>
+<h4 id="what-is-azure-blob-storage">What is Azure Blob storage?</h4>
+<p>Azure Blob storage is a service that enables you to store massive amounts of unstructured data, or <em>blobs</em>, in the cloud. Like Azure Table storage, you create blobs using an Azure storage account.</p>
+<p>Microsoft Azure virtual machines use blob storage for holding virtual machine disk images. These objects can be several hundreds of GB in size.</p>
+<p>Azure currently supports three different types of blob:</p>
+<ul>
+<li>
+<p><em>Block blobs</em>. A block blob is handled as a set of blocks. Each block can vary in size, up to 100 MB. A block blob can contain up to 50,000 blocks, giving a maximum size of over 4.7 TB. The block is the smallest amount of data that can be read or written as an individual unit. Block blobs are best used to store discrete, large, binary objects that change infrequently.</p>
+</li>
+<li>
+<p><em>Page blobs</em>. A page blob is organized as a collection of fixed size 512-byte pages. A page blob is optimized to support random read and write operations; you can fetch and store data for a single page if necessary. A page blob can hold up to 8 TB of data. Azure uses page blobs to implement virtual disk storage for virtual machines.</p>
+</li>
+<li>
+<p><em>Append blobs</em>. An append blob is a block blob optimized to support append operations. You can only add blocks to the end of an append blob; updating or deleting existing blocks isn’t supported. Each block can vary in size, up to 4 MB. The maximum size of an append blob is just over 195 GB.</p>
+</li>
+</ul>
+<p>Inside an Azure storage account, you create blobs inside <em>containers</em>. A container provides a convenient way of grouping related blobs together, and you can organize blobs in a hierarchy of folders, similar to files in a file system on disk. You control who can read and write blobs inside a container at the container level.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-non-relational-data-offerings-azure/media/3-container.png" alt="Image showing how blobs are organized by containers"><br>
+Blob storage provides three access tiers, which help to balance access latency and storage cost:</p>
+<ul>
+<li>The <em>Hot</em> tier is the default. You use this tier for blobs that are accessed frequently.</li>
+<li>The <em>Cool</em> tier. This tier has lower performance and incurs reduced storage charges compared to the Hot tier.</li>
+<li>The <em>Archive</em> tier. This tier provides the lowest storage cost, but with increased latency. The Archive tier is intended for historical data that mustn’t be lost, but is required only rarely. For the Archive tier, it can take hours for the data to become available. To retrieve a blob from the Archive tier, you must change the access tier to Hot or Cool. The blob will then be <em>rehydrated</em>.</li>
+</ul>
+<p>You can create lifecycle management policies for blobs in a storage account. A lifecycle management policy can automatically move a blob from Hot to Cool, and then to the Archive tier, as it ages and is used less frequently.</p>
+<h4 id="use-cases-and-management-benefits-of-using-azure-blob-storage">Use cases and management benefits of using Azure Blob Storage</h4>
+<p>Common uses of Azure Blob Storage include:</p>
+<ul>
+<li>Serving images or documents directly to a browser, in the form of a static website</li>
+<li>Storing files for distributed access</li>
+<li>Streaming video and audio</li>
+<li>Storing data for backup and restore, disaster recovery, and archiving</li>
+<li>Storing data for analysis by an on-premises or Azure-hosted service</li>
+</ul>
+<p>To ensure availability, Azure Blob storage provides redundancy. Blobs are always replicated three times in the region in which you created your account, but you can also select geo-redundancy, which replicates your data in a second region (at additional cost).</p>
+<p>Other features available with Azure Blob storage include:</p>
+<ul>
+<li>
+<p><em>Versioning</em>. You can maintain and restore earlier versions of a blob.</p>
+</li>
+<li>
+<p><em>Soft delete</em>. This feature enables you to recover a blob that has been removed or overwritten, by accident or otherwise.</p>
+</li>
+<li>
+<p><em>Snapshots</em>. A snapshot is a read-only version of a blob at a particular point in time.</p>
+</li>
+<li>
+<p><em>Change Feed</em>. The change feed for a blob provides an ordered, read-only, record of the updates made to a blob.</p>
+</li>
+</ul>
+<h3 id="explore-azure-file-storage">Explore Azure File storage</h3>
+<h4 id="what-is-azure-file-storage">What is Azure File Storage?</h4>
+<p>Azure File Storage enables you to create files shares in the cloud, and access these file shares from anywhere with an internet connection. Azure File Storage exposes file shares using the Server Message Block 3.0 (SMB) protocol. This is the same file sharing protocol used by many existing on-premises applications. These applications should continue to work unchanged if you migrate your file shares to the cloud. You can control access to shares in Azure File Storage using authentication and authorization services available through Azure Active Directory Domain Services.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-non-relational-data-offerings-azure/media/4-file-shares.png" alt="Image showing the relationships between a storage account, file shares, applications using the file shares, and Azure Active Directory Domain Services"><br>
+You create Azure File storage in a storage account. Azure File Storage enables you to share up to 100 TB of data in a single storage account. This data can be distributed across any number of file shares in the account. The maximum size of a single file is 1 TB, but you can set quotas to limit the size of each share below this figure.</p>
+<h4 id="use-cases-and-management-benefits-of-using-azure-file-storage">Use cases and management benefits of using Azure File Storage</h4>
+<p>Azure File Storage is designed to support many scenarios, including the following:</p>
+<ul>
+<li>
+<p>Migrate existing applications to the cloud.</p>
+</li>
+<li>
+<p>Share server data across on-premises and cloud.</p>
+</li>
+<li>
+<p>Integrate modern applications with Azure File Storage.</p>
+<p>By leveraging the modern REST API that Azure File Storage implements in addition to SMB 3.0, you can integrate legacy applications with modern cloud applications, or develop new file or file share-based applications.</p>
+</li>
+<li>
+<p>Simplify hosting High Availability (HA) workload data.</p>
+</li>
+</ul>
+<p>Don’t use Azure File Storage for files that can be written by multiple concurrent processes simultaneously.</p>
+<p>Azure Files Storage is a fully managed service. Your shared data is replicated locally within a region, but can also be geo-replicated to a second region.</p>
+<p>All data is encrypted at rest, and you can enable encryption for data in-transit between Azure File Storage and your applications.</p>
+<h3 id="explore-azure-cosmos-db">Explore Azure Cosmos DB</h3>
+<h4 id="what-is-azure-cosmos-db">What is Azure Cosmos DB?</h4>
+<p>Azure Cosmos DB is a multi-model NoSQL database management system. Cosmos DB manages data as a partitioned set of documents. A document is a collection of fields, identified by a key. The fields in each document can vary, and a field can contain child documents. Many document databases use JSON (JavaScript Object Notation) to represent the document structure.</p>
+<p>A document can hold up to 2 MB of data, including small binary objects.</p>
+<p>The APIs that Cosmos DB currently supports include:</p>
+<ul>
+<li><em>SQL API</em>.</li>
+<li><em>Table API</em>. This interface enables you to use the Azure Table Storage API to store and retrieve documents.</li>
+<li><em>MongoDB API</em>.</li>
+<li><em>Cassandra API</em>. Cassandra is a column family database management system.</li>
+<li><em>Gremlin API</em>. The Gremlin API implements a graph database interface to Cosmos DB. A graph is a collection of data objects and directed relationships. Data is still held as a set of documents in Cosmos DB, but the Gremlin API enables you to perform graph queries over data.</li>
+</ul>
+<p>The primary purpose of the Table, MongoDB, Cassandra, and Gremlin APIs is to support existing applications. If you are building a new application and database, you should use the SQL API.</p>
+<p>Documents in a Cosmos DB database are organized into containers. The documents in a container are grouped together into partitions. A partition holds a set of documents that share a common partition key. You designate one of the fields in your documents as the partition key. You should select a partition key that collects all related documents together.</p>
+<p>There’s a superficial similarity between a Cosmos DB container and a table in Azure Table storage: in both cases, data is partitioned and documents (rows in a table) are identified by a unique ID within a partition. However, the similarity ends there. Unlike Azure Table storage, documents in a Cosmos DB partition aren’t sorted by ID. Instead, Cosmos DB maintains a separate index. This index contains not only the document IDs, but also tracks the value of every other field in each document.</p>
+<h4 id="use-cases-and-management-benefits-of-using-azure-cosmos-db">Use cases and management benefits of using Azure Cosmos DB</h4>
+<p>Cosmos DB is a highly scalable database management system. Cosmos DB automatically allocates space in a container for your partitions, and each partition can grow up to 10 GB in size. Indexes are created and maintained automatically.</p>
+<p>To ensure availability, all databases are replicated within a single region. This replication is transparent, and failover from a failed replica is automatic. Cosmos DB guarantees 99.99% high availability. Additionally, you can choose to replicate data across regions, at additional cost. All replicas are synchronized, although there may be a small window while updates are transmitted and applied. The multi-master replication protocol supports five well-defined consistency choices - strong, bounded staleness, session, consistent prefix, and eventual.</p>
+<p>Cosmos DB guarantees less than 10-ms latencies for both reads (indexed) and writes at the 99th percentile, all around the world.</p>
+<p>Cosmos DB is certified for a wide array of compliance standards. Additionally, all data in Cosmos DB is encrypted at rest and in motion.</p>
+<p>Cosmos DB is highly suitable for the following scenarios:</p>
+<ul>
+<li><em>IoT and telematics</em>. These systems typically ingest large amounts of data in frequent bursts of activity.</li>
+<li><em>Retail and marketing</em>.</li>
+<li><em>Gaming</em>. The database tier is a crucial component of gaming applications. Games often require single-millisecond latencies for reads and write to provide an engaging in-game experience</li>
+<li><em>Web and mobile applications</em>.</li>
+</ul>
+<h2 id="explore-provisioning-and-deploying-non-relational-data-services-in-azure">Explore provisioning and deploying non-relational data services in Azure</h2>
+<h3 id="provision-azure-cosmos-db">Provision Azure Cosmos DB</h3>
+<p>In Cosmos DB, you organize your data as a collection of documents stored in containers. Containers are held in a database. A database runs in the context of a Cosmos DB account. You must create the account before you can set up any databases.</p>
+<p><a href="https://docs.microsoft.com/en-us/learn/modules/explore-provision-deploy-non-relational-data-services-azure/3-provision-azure-cosmos-db">hier weiter</a></p>
 
