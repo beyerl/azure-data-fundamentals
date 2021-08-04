@@ -976,5 +976,189 @@ You create Azure File storage in a storage account. Azure File Storage enables y
 <h2 id="explore-provisioning-and-deploying-non-relational-data-services-in-azure">Explore provisioning and deploying non-relational data services in Azure</h2>
 <h3 id="provision-azure-cosmos-db">Provision Azure Cosmos DB</h3>
 <p>In Cosmos DB, you organize your data as a collection of documents stored in containers. Containers are held in a database. A database runs in the context of a Cosmos DB account. You must create the account before you can set up any databases.</p>
-<p><a href="https://docs.microsoft.com/en-us/learn/modules/explore-provision-deploy-non-relational-data-services-azure/3-provision-azure-cosmos-db">hier weiter</a></p>
+<h4 id="how-to-provision-a-cosmos-db-account">How to provision a Cosmos DB account</h4>
+<p>You can provision a Cosmos DB account interactively using the Azure portal, or you can perform this task programmatically through the Azure CLI, Azure PowerShell, or an Azure Resource Manager template.</p>
+<p>Azure CLI</p>
+<pre><code>## Azure CLI
+
+az cosmosdb create \
+  --subscription &lt;your-subscription&gt; \
+  --resource-group &lt;resource-group-name&gt; \
+  --name &lt;cosmosdb-account-name&gt; \
+  --locations regionName=eastus failoverPriority=0 \
+  --locations regionName=westus failoverPriority=1 \
+  --enable-multiple-write-locations
+</code></pre>
+<p>PowerShell</p>
+<pre><code>## Azure PowerShell
+
+New-AzCosmosDBAccount `
+  -ResourceGroupName "&lt;resource-group-name&gt;" `
+  -Name "&lt;cosmosbd-account-name&gt;" `
+  -Location @("West US", "East US") `
+  -EnableMultipleWriteLocations
+</code></pre>
+<h4 id="how-to-create-a-database-and-a-container">How to create a database and a container</h4>
+<p>Databases and containers are the primary resource consumers. Resources are allocated in terms of the storage space required to hold your databases and containers, and the processing power required to store and retrieve data.</p>
+<p>Azure Cosmos DB uses the concept of Request Units per second (RU/s) to manage the performance and cost of databases. This measure abstracts the underlying physical resources that need to be provisioned to support the required performance. Microsoft gives a measure of approximately one RU as the resources required to read a 1-KB document with 10 fields. So a throughput of one RU per second (RU/s) will support an application that reads a single 1-KB document each second. If you underprovision (by specifying too few RU/s), Cosmos DB will start throttling performance. The minimum throughput you can allocate to a database or container is 400 RU/s.</p>
+<p>Azure CLI</p>
+<pre><code>## Azure CLI - create a database
+
+az cosmosdb sql database create \
+  --account-name &lt;cosmos-db-account-name&gt; \
+  --name &lt;database-name&gt; \
+  --resource-group &lt;resource-group-name&gt; \
+  --subscription &lt;your-subscription&gt; \
+  --throughput &lt;number-of-RU/s&gt;
+
+## Azure CLI - create a container
+
+az cosmosdb sql container create \
+  --account-name &lt;cosmos-db-account-name&gt; \
+  --database-name &lt;database-name&gt; \
+  --name &lt;container-name&gt; \
+  --resource-group &lt;resource-group-name&gt; \
+  --partition-key-path &lt;key-field-in-documents&gt;
+</code></pre>
+<p>PowerShell</p>
+<pre><code>## Azure PowerShell - create a database
+
+New-AzCosmosDBSqlDatabase `
+    -ResourceGroupName "&lt;resource-group-name&gt;" `
+    -AccountName "&lt;cosmos-db-account-name&gt;" `
+    -Name "&lt;database-name&gt;" `
+    -Throughput &lt;number-of-RU/s&gt;
+
+## Azure PowerShell - create a container
+
+New-AzCosmosDBSqlContainer `
+    -ResourceGroupName "&lt;resource-group-name&gt;" `
+    -AccountName "&lt;cosmos-db-account-name&gt;" `
+    -DatabaseName "&lt;database-name&gt;" `
+    -Name "&lt;container-name&gt;" `
+    -PartitionKeyKind Hash `
+    -PartitionKeyPath "&lt;key-field-in-documents&gt;"
+</code></pre>
+<h3 id="provision-other-non-relational-data-services">Provision other non-relational data services</h3>
+<p>This unit describes how to provision Data Lake storage, Blob storage, and File Storage. As with Cosmos DB, you can provision these services using the Azure portal, the Azure CLI, Azure PowerShell, and Azure Resource Manager templates. Data Lake storage, Blob storage, and File Storage, all require that you first create an Azure storage account.</p>
+<h4 id="how-to-create-a-storage-account">How to create a storage account</h4>
+<h5 id="use-the-azure-portal">Use the Azure portal</h5>
+<p>Use the <strong>Create storage account</strong> page to set up a new storage account using the Azure portal.</p>
+<p><strong>Performance</strong>. This setting has two options:</p>
+<ul>
+<li><strong>Standard</strong> storage accounts are based on hard disks.</li>
+<li><strong>Premium</strong> storage uses solid-state drives, and has much lower latency and better read/write performance than standard storage.</li>
+</ul>
+<p><strong>Account kind</strong>. Azure storage supports several different types of account:</p>
+<ul>
+<li><strong>General-purpose v2</strong>. You can use this type of storage account for blobs, files, queues, and tables, and is recommended for most scenarios that require Azure Storage. If you want to provision Azure Data Lake Storage, you should specify this account type.</li>
+<li><strong>General-purpose v1</strong>. This is a legacy account type for blobs, files, queues, and tables. Use general-purpose v2 accounts when possible.</li>
+<li><strong>BlockBlobStorage</strong>. The type of storage account is only available for premium accounts. You use this account type for block blobs and append blobs.</li>
+<li><strong>FileStorage</strong>. This type is also only available for premium accounts. You use it to create files-only storage accounts with premium performance characteristics.</li>
+<li><strong>BlobStorage</strong>. This is another legacy account type that can only hold blobs.</li>
+</ul>
+<p><strong>Replication</strong>. Data in an Azure Storage account is always replicated three times in the region you specify as the primary location for the account.</p>
+<ul>
+<li><strong>Locally redundant storage (LRS)</strong> copies your data synchronously three times within a single physical location in the region.</li>
+<li><strong>Geo-redundant storage (GRS)</strong> copies your data synchronously three times within a single physical location in the primary region using LRS.</li>
+<li><strong>Read-access geo-redundant storage (RA-GRS)</strong> replication is an extension of GRS that provides direct read-only access to the data in the secondary location. In contrast, the GRS option doesn’t expose the data in the secondary location, and it’s only used to recover from a failure in the primary location. RA-GRS replication enables you to store a read-only copy of the data close to users that are located in a geographically distant location, helping to reduce read latency times.</li>
+<li><strong>Zone redundant storage (ZRS)</strong> Zone-redundant storage replicates your Azure Storage data synchronously across three Azure availability zones in the primary region.</li>
+</ul>
+<p>To maintain performance, premium storage accounts only support LRS replication. This is because replication is performed synchronously to maintain data integrity. Replicating data to a distant region can increase latency to the point at which any advantages of using premium storage are lost.</p>
+<p><strong>Access tier</strong>. This option is only available for standard storage accounts. You can select between <strong>Hot</strong> and <strong>Cool</strong>.</p>
+<h5 id="use-the-azure-cli">Use the Azure CLI</h5>
+<p>Azure CLI</p>
+<pre><code>az storage account create \
+  --name &lt;storage-account-name&gt; \
+  --resource-group &lt;resource-group&gt; \
+  --location &lt;your-location&gt; \
+  --sku &lt;sku&gt; \
+  --kind &lt;kind&gt; \
+  --access-tier &lt;tier&gt;
+
+</code></pre>
+<p>The <strong>sku</strong> is combination of the performance tier and replication options. It can be one of Premium_LRS, Premium_ZRS, Standard_GRS, Standard_GZRS, Standard_LRS, Standard_RAGRS, Standard_RAGZRS, or Standard_ZRS.</p>
+<p>The <strong>kind</strong> parameter should be one of BlobStorage, BlockBlobStorage, FileStorage, Storage, or StorageV2.</p>
+<p>The <strong>access-tier</strong> parameter can either be Cool or Hot.</p>
+<h5 id="use-azure-powershell">Use Azure PowerShell</h5>
+<pre><code>New-AzStorageAccount `
+  -Name "&lt;storage-account-name&gt;" `
+  -ResourceGroupName "&lt;resource-group-name&gt;" `
+  -Location "&lt;your-location&gt;" `
+  -SkuName "&lt;sku&gt;" `
+  -Kind "&lt;kind&gt;" `
+  -AccessTier "&lt;tier&gt;"
+</code></pre>
+<h4 id="how-to-provision-data-lake-storage-in-a-storage-account">How to provision Data Lake storage in a storage account</h4>
+<p>If you’re provisioning a Data Lake storage, you <strong>must</strong> specify the appropriate configuration settings when you create the storage account. You can’t configure Data Lake storage after the storage account has been set up.</p>
+<p>In the Azure portal, on the <strong>Advanced</strong> tab of the <strong>Create storage account</strong> page, in the <strong>Data Lake Storage Gen2</strong> section, select <strong>Enabled</strong> for the <strong>Hierarchical namespace</strong> option.</p>
+<p>After the storage account has been created, you can add one or more Data Lake Storage containers to the account.</p>
+<h5 id="use-the-azure-cli-1">Use the Azure CLI</h5>
+<p>Azure CLI</p>
+<pre><code>az storage account create \
+  --name &lt;storage-account-name&gt; \
+  --resource-group &lt;resource-group&gt; \
+  --location &lt;your-location&gt; \
+  --sku &lt;sku&gt; \
+  --kind &lt;kind&gt; \
+  --access-tier &lt;tier&gt; \
+  --enable-hierarchical-namespace true
+
+</code></pre>
+<h5 id="use-azure-powershell-1">Use Azure PowerShell</h5>
+<p>PowerShell</p>
+<pre><code>New-AzStorageAccount `
+  -Name "&lt;storage-account-name&gt;" `
+  -ResourceGroupName "&lt;resource-group-name&gt;" `
+  -Location "&lt;your-location&gt;" `
+  -SkuName "&lt;sku&gt;" `
+  -Kind "&lt;kind&gt;" `
+  -AccessTier "&lt;tier&gt;" `
+  -EnableHierarchicalNamespace $True
+
+</code></pre>
+<h4 id="how-to-provision-blob-storage-in-a-storage-account">How to provision Blob storage in a storage account</h4>
+<h5 id="use-the-azure-portal-1">Use the Azure portal</h5>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-provision-deploy-non-relational-data-services-azure/media/4-containers.png" alt="Image of the Overview page for a storage account. The Containers section is highlighted."><br>
+The <strong>Containers</strong> page enables you to create and manage containers. You can also specify the access level. By default, data held in a container is only accessible by the container owner. You can set the access level to <strong>Blob</strong> to enable public read access to any blobs created in the container, or <strong>Container</strong> to allow read access to the entire contents of the container, including the ability to list all blobs.</p>
+<h5 id="use-the-azure-cli-2">Use the Azure CLI</h5>
+<p>Azure CLI</p>
+<pre><code>az storage container create \
+  --name &lt;container-name&gt; \
+  --account-name &lt;storage-account-name&gt; \
+  --public-access &lt;access&gt;
+
+</code></pre>
+<p>The <strong>public-access</strong> parameter can be <strong>blob</strong>, <strong>container</strong>, or <strong>off</strong> (for private access only).</p>
+<h5 id="use-azure-powershell-2">Use Azure PowerShell</h5>
+<p>PowerShell</p>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "&lt;resource-group&gt;" `
+  -Name "&lt;storage-account-name&gt;" | New-AzStorageContainer `
+    -Name "&lt;container-name&gt;" `
+    -Permission &lt;permission&gt;
+
+</code></pre>
+<p>The <strong>Permission</strong> parameter accepts the values <strong>Blob</strong>, <strong>Container</strong>, or <strong>Off</strong>.</p>
+<h4 id="how-to-provision-file-storage-in-a-storage-account">How to provision File storage in a storage account</h4>
+<h5 id="use-the-azure-portal-2">Use the Azure portal</h5>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-provision-deploy-non-relational-data-services-azure/media/4-file-shares.png" alt="Image of the Overview page for a storage account. The File shares section is highlighted.">The total size of all files across all file shares in a storage account can’t exceed 5120 GB.</p>
+<h5 id="use-the-azure-cli-3">Use the Azure CLI</h5>
+<p>Azure CLI</p>
+<pre><code>az storage share create \
+  --name &lt;share-name&gt; \
+  --account-name &lt;storage-account-name&gt;
+
+</code></pre>
+<h5 id="use-azure-powershell-3">Use Azure PowerShell</h5>
+<p>PowerShell</p>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "&lt;resource-group&gt;" `
+  -Name "&lt;storage-account-name&gt;" |New-AzStorageShare `
+    -Name "&lt;share-name&gt;"
+</code></pre>
+<h3 id="describe-configuring-non-relational-data-services">Describe configuring non-relational data services</h3>
+<h4 id="configure-connectivity-and-firewalls-1">Configure connectivity and firewalls</h4>
+<p>The default connectivity for Azure Cosmos DB and Azure Storage is to enable access to the world at large. You can connect to these services from an on-premises network, the internet, or from within an Azure virtual network. Although this level of access sounds risky, most Azure services mitigate this risk by requiring authentication before granting access.</p>
+<p><a href="https://docs.microsoft.com/en-us/learn/modules/explore-provision-deploy-non-relational-data-services-azure/5-describe-configure-non-relational-data-services">hier weiter</a></p>
 
