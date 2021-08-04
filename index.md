@@ -1160,5 +1160,193 @@ The <strong>Containers</strong> page enables you to create and manage containers
 <h3 id="describe-configuring-non-relational-data-services">Describe configuring non-relational data services</h3>
 <h4 id="configure-connectivity-and-firewalls-1">Configure connectivity and firewalls</h4>
 <p>The default connectivity for Azure Cosmos DB and Azure Storage is to enable access to the world at large. You can connect to these services from an on-premises network, the internet, or from within an Azure virtual network. Although this level of access sounds risky, most Azure services mitigate this risk by requiring authentication before granting access.</p>
-<p><a href="https://docs.microsoft.com/en-us/learn/modules/explore-provision-deploy-non-relational-data-services-azure/5-describe-configure-non-relational-data-services">hier weiter</a></p>
+<h5 id="configure-connectivity-to-virtual-networks-and-on-premises-computers-1">Configure connectivity to virtual networks and on-premises computers</h5>
+<p>To restrict connectivity, use the <strong>Networking</strong> page for a service. To limit connectivity, choose <strong>Selected networks</strong>.</p>
+<p>In the <strong>Virtual networks</strong> section, you can specify which virtual networks are allowed to route traffic to the service.</p>
+<p>If you need to connect to the service from an on-premises computer, in the <strong>Firewall</strong> section, add the IP address of the computer.</p>
+<p>The <strong>Exceptions</strong> setting allows you to enable access to any other of your services created in your Azure subscription.</p>
+<h5 id="configure-connectivity-from-private-endpoints">Configure connectivity from private endpoints</h5>
+<p><strong>Azure Private Endpoint</strong> is a network interface that connects you privately and securely to a service powered by Azure Private Link. Private Endpoint uses a private IP address from your VNet, effectively bringing the service into your VNet.</p>
+<h4 id="configure-authentication-1">Configure authentication</h4>
+<p>Azure services actually provide two keys, labeled <strong>key1</strong> and <strong>key2</strong>. An application can use either key to connect to the service.</p>
+<p>Any user or application that knows the access key for a resource can connect to that resource. However, access keys provide a rather coarse-grained level of authentication. Additionally, if you need to regenerate an access key (after accidental disclosure, for example), you may need to update all applications that connect using that key.</p>
+<p>Azure Active Directory (Azure AD) provides superior security and ease of use over access key authorization. You add users and other security principals (such as an application) to a <em>security domain</em> managed by Azure AD.</p>
+<h4 id="configure-access-control-1">Configure access control</h4>
+<p>Azure AD enables you to specify who, or what, can access your resources. Access control defines what a user or application can do with your resources after they’ve been authenticated. (For further details see RBAC section in relational databases chapter).</p>
+<h4 id="configure-security">Configure security</h4>
+<p>Apart from authentication and authorization, many services provide additional protection through security.</p>
+<p>Security implements threat protection and assessment. Threat protection tracks security incidents and alerts across your service.</p>
+<h3 id="configure-azure-cosmos-db-and-azure-storage">Configure Azure Cosmos DB, and Azure Storage</h3>
+<h4 id="configure-cosmos-db">Configure Cosmos DB</h4>
+<h5 id="configure-replication">Configure replication</h5>
+<p>Azure Cosmos DB enables you to replicate the databases and containers in your account across multiple regions. When you initially provision an account, you can specify that you want to copy data to another region. The <strong>Replicate data globally</strong> page enables you to configure replication in more detail. You can replicate to multiple regions, and you select the regions to use.</p>
+<p>You can also use this page to configure automatic failover to help ensure high availability.</p>
+<p>By default, only the region in which you created the account supports write operations; the replicas are all read-only. However, you can enable multi-region writes. Multi-region writes can cause conflicts though, if applications running in different regions modify the same data. In this case, the most recent write will overwrite changes made earlier when data is replicated, although you can write your own code to apply a different strategy.</p>
+<p>Replication is asynchronous, so there’s likely to be a lag between a change made in one region, and that change becoming visible in other regions.</p>
+<h3 id="configure-consistency">Configure consistency</h3>
+<p>Within a single region, Cosmos DB uses a cluster of servers. This approach helps to improve scalability and availability.</p>
+<p>Cosmos DB enables you to specify how inconsistencies should be handled. It provides the following options:</p>
+<ul>
+<li>
+<p><strong>Eventual</strong>. This option is the least consistent. Changes won’t be lost, they’ll appear <em>eventually</em>, but they might not appear immediately. Additionally, if an application makes several changes, some of those changes might be immediately visible, but others might be delayed; changes could appear out of order.</p>
+</li>
+<li>
+<p><strong>Consistent Prefix</strong>. This option ensures that changes will appear in order, although there may be a delay before they become visible.</p>
+</li>
+<li>
+<p><strong>Session</strong>. If an application makes a number of changes, they’ll all be visible to that application, and in order. Other applications may see old data, although any changes will appear in order, as they did for the <strong>Consistent Prefix</strong> option. This form of consistency is sometimes known as <em>read your own writes</em>.</p>
+</li>
+<li>
+<p><strong>Bounded Staleness</strong>. There’s a lag between writing and then reading the updated data. You specify this staleness either as a period of time, or number of previous versions the data will be inconsistent for.</p>
+</li>
+<li>
+<p><strong>Strong</strong>: In this case, all writes are only visible to clients after the changes are confirmed as written successfully to all replicas. This option is unavailable if you need to distribute your data across multiple global regions.</p>
+</li>
+</ul>
+<p>You can change the default consistency for a Cosmos DB account using the <strong>Default consistency</strong> page in the Azure portal. Applications can override the default consistency level for individual read operations. However, they can’t increase the consistency above that specified on this page; they can only decrease it.</p>
+<h4 id="configure-storage-accounts">Configure Storage accounts</h4>
+<h5 id="general-configuration">General configuration</h5>
+<p>The <strong>Configuration</strong> page for a storage account enables you to modify some general settings of the account. You can:</p>
+<ul>
+<li>
+<p>Enable or disable secure communications with the service.</p>
+</li>
+<li>
+<p>Switch the default access tier between Cool and Hot.</p>
+</li>
+<li>
+<p>Change the way in which the account is replicated.</p>
+</li>
+<li>
+<p>Enable or disable integration with Azure Active Directory Domain Services (Azure AD DS) for requests that access file shares.</p>
+</li>
+</ul>
+<h5 id="configure-encryption">Configure encryption</h5>
+<p>All data held in an Azure Storage account is automatically encrypted. By default, encryption is performed using keys managed and owned by Microsoft. To use your own keys, add them to Azure Key Vault.</p>
+<h5 id="configure-shared-access-signatures">Configure shared access signatures</h5>
+<p>You can use shared access signatures (SAS) to grant limited rights to resources in an Azure storage account for a specified time period.</p>
+<p>A SAS is a token that an application can use to connect to the resource. The application appends the token to the URL of the resource.</p>
+<p>Use the <strong>Shared access signature</strong> page in the Azure portal to generate SAS tokens. The SAS token is encrypted using one of the access keys; you specify which key to use (key1 or key2).</p>
+<h2 id="manage-non-relational-data-stores-in-azure">Manage non-relational data stores in Azure</h2>
+<h3 id="manage-azure-cosmos-db">Manage Azure Cosmos DB</h3>
+<h4 id="perform-data-operations-in-cosmos-db">Perform data operations in Cosmos DB</h4>
+<p>Cosmos DB provides several options for uploading data to a Cosmos DB database, and querying that data. You can:</p>
+<ul>
+<li>Use <strong>Data Explorer</strong> in the Azure portal to run ad-hoc queries. You can also use this tool to load data, but you can only load one document at a time. The data load functionality is primarily aimed at uploading a small number of documents (up to 2 MB in total size) for test purposes, rather than importing large quantities of data.</li>
+<li>Use the Cosmos DB Data Migration tool to perform a bulk-load or transfer of data from another data source.</li>
+<li>Use Azure Data Factory to import data from another source.</li>
+<li>Write a custom application that imports data using the Cosmos DB library.</li>
+<li>Create your own application that uses the functions available through the Cosmos DB SQL API client library to store data.</li>
+</ul>
+<h5 id="load-data-using-the-cosmos-db-data-migration-tool">Load data using the Cosmos DB Data Migration tool</h5>
+<p>You can use the Data Migration tool to import data to Azure Cosmos DB from a variety of sources, including:</p>
+<ul>
+<li>JSON files</li>
+<li>MongoDB</li>
+<li>SQL Server</li>
+<li>CSV files</li>
+<li>Azure Table storage</li>
+<li>Amazon DynamoDB</li>
+<li>HBase</li>
+<li>Azure Cosmos containers</li>
+</ul>
+<h5 id="configure-cosmos-db-to-support-bulk-loading">Configure Cosmos DB to support bulk loading</h5>
+<p>If you have a large amount of data, the Data Migration Tool can make use of multiple concurrent threads to batch your data into chunks and load the chunks in parallel. Each thread acts as a separate client connection to the database. Bulk loading can become a write-intensive task. If you’re planning on performing a large data import, you should increase the throughput resources available to the target Cosmos container. If you’re using the Data Migration Tool to create the container as well as populate it, the <strong>Target information</strong> page enables you to specify the throughput resources to allocate. If you’ve already created the container, use the <strong>Scale</strong> settings of the database in the Data Explorer page for your database in the Azure portal to specify the maximum throughput, or set the throughput to <strong>Autoscale</strong>.</p>
+<h3 id="query-azure-cosmos-db">Query Azure Cosmos DB</h3>
+<p>Although Azure Cosmos DB is described as a NoSQL database management system, the SQL API enables you to run <em>SQL-like</em> queries against Cosmos DB databases. These queries use a syntax similar to that of SQL, but there are some differences. This is because the data in a Cosmos DB is structured as documents rather than tables.</p>
+<h4 id="use-the-sql-api-to-query-documents">Use the SQL API to query documents</h4>
+<p>A SQL API SELECT query includes the following clauses:</p>
+<ol>
+<li>
+<p><strong>SELECT clause</strong>.</p>
+</li>
+<li>
+<p><strong>FROM clause</strong>.</p>
+</li>
+<li>
+<p><strong>WHERE clause</strong>.</p>
+</li>
+<li>
+<p><strong>ORDER BY clause</strong>.</p>
+</li>
+</ol>
+<p>A query can also contain a <strong>JOIN clause</strong>. In the SQL API, you use JOIN clauses to connect fields in a document with fields in a subdocument that is part of the same document.</p>
+<h5 id="understand-supported-operators">Understand supported operators</h5>
+
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Operator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unary</td>
+<td>+,-,~, NOT</td>
+</tr>
+<tr>
+<td>Arithmetic</td>
+<td>+,-,*,/,%</td>
+</tr>
+<tr>
+<td>Bitwise</td>
+<td>|, &amp;, ^, &lt;&lt;, &gt;&gt;, &gt;&gt;&gt;</td>
+</tr>
+<tr>
+<td>Logical</td>
+<td>AND, OR</td>
+</tr>
+<tr>
+<td>Comparison</td>
+<td>=, !=, &lt;, &gt;, &lt;=, &gt;=, &lt;&gt;</td>
+</tr>
+<tr>
+<td>String (concatenate)</td>
+<td>||</td>
+</tr>
+<tr>
+<td>Ternary (if)</td>
+<td>?</td>
+</tr>
+</tbody>
+</table><p>The SQL API also supports:</p>
+<ul>
+<li>
+<p>The DISTINCT operator that you use as part of the SELECT clause to eliminate duplicates in the result data.</p>
+</li>
+<li>
+<p>The TOP operator that you can use to retrieve only the first few rows returned by a query that might otherwise generate a large result set.</p>
+</li>
+<li>
+<p>The BETWEEN operation that you use as part of the WHERE clause to define an inclusive range of values. The condition field BETWEEN a AND b is equivalent to the condition <code>field &gt;= a AND field &lt;= b</code>.</p>
+</li>
+<li>
+<p>The IS_DEFINED operator that you can use for detecting whether a specified field exists in a document.</p>
+</li>
+</ul>
+<h5 id="understand-aggregate-functions">Understand aggregate functions</h5>
+<p>The SQL API query language supports the following aggregate functions:</p>
+<ul>
+<li>
+<p><strong>COUNT§</strong>.</p>
+</li>
+<li>
+<p><strong>SUM§</strong>.</p>
+</li>
+<li>
+<p><strong>AVG§</strong>.</p>
+</li>
+<li>
+<p><strong>MAX§</strong>.</p>
+</li>
+<li>
+<p><strong>MIN§</strong>.</p>
+</li>
+</ul>
+<p>SQL API query language doesn’t support the GROUP BY clause.</p>
+<h4 id="query-documents-with-the-sql-api-using-data-explorer">Query documents with the SQL API using Data Explorer</h4>
+<p>You can use Data Explorer in the Azure portal to create and run queries against a Cosmos DB container.</p>
+<h3 id="manage-azure-blob-storage">Manage Azure Blob storage</h3>
+<p><a href="https://docs.microsoft.com/en-us/learn/modules/explore-non-relational-data-stores-azure/4-manage-azure-blob-storage">hier weiter</a></p>
 
