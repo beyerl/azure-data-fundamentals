@@ -1348,5 +1348,146 @@ The <strong>Containers</strong> page enables you to create and manage containers
 <h4 id="query-documents-with-the-sql-api-using-data-explorer">Query documents with the SQL API using Data Explorer</h4>
 <p>You can use Data Explorer in the Azure portal to create and run queries against a Cosmos DB container.</p>
 <h3 id="manage-azure-blob-storage">Manage Azure Blob storage</h3>
-<p><a href="https://docs.microsoft.com/en-us/learn/modules/explore-non-relational-data-stores-azure/4-manage-azure-blob-storage">hier weiter</a></p>
+<h4 id="create-an-azure-storage-container">Create an Azure Storage container</h4>
+<p>In an Azure storage account, you store blobs in <em>containers</em>. You create a container in an Azure Storage account.</p>
+<h5 id="use-the-azure-portal-3">Use the Azure portal</h5>
+<p>In the Azure portal, go to the <strong>Overview</strong> page for your Azure Storage account, and select <strong>Containers</strong>.</p>
+<p>On the <strong>Containers</strong> page, select <strong>+ Container</strong>, and provide a name for the new container. You can also specify the public access level. For a container that will be used to hold blobs, the most appropriate access level is <strong>Blob</strong>. This setting supports anonymous read-only access for blobs. However, unauthenticated clients can’t list the blobs in the container. This means they can only download a blob if they know its name and location within the container.</p>
+<h5 id="use-the-azure-cli-4">Use the Azure CLI</h5>
+<pre><code>az storage container create \
+  --name images \
+  --account-name contosodata \
+  --resource-group contoso-group \
+  --public-access blob
+</code></pre>
+<h5 id="use-azure-powershell-4">Use Azure PowerShell</h5>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "contoso-group" `
+  -Name "contosodata" | New-AzStorageContainer `
+    -Name "images" `
+    -Permission Blob
+</code></pre>
+<h4 id="upload-a-blob-to-azure-storage">Upload a blob to Azure Storage</h4>
+<h5 id="use-the-azure-portal-4">Use the Azure portal</h5>
+<p>On the page for the container, in the toolbar, select <strong>Upload</strong>. In the <strong>Upload blob</strong> dialog box, browse to the file container the data to upload. The <strong>Advanced</strong> drop-down section provides options you can modify the default options.</p>
+<h5 id="use-the-azure-cli-5">Use the Azure CLI</h5>
+<pre><code>az storage blob upload \
+  --container-name images \
+  --account-name contosodata \
+  --file "\data\racer_green_large.gif" \
+  --name "bikes\racer_green"
+</code></pre>
+<pre><code>az storage blob upload-batch \
+  --account-name contosodata \
+  --source "\data" \
+  --pattern "*.gif" \
+  --destination "images\bikes"
+</code></pre>
+<h5 id="use-azure-powershell-5">Use Azure PowerShell</h5>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "contoso-group" `
+  -Name "contosodata" | Set-AzStorageBlobContent `
+    -Container "images" `
+    -File "\data\racer_green_large.gif" `
+    -Blob "bikes\racer_green"
+</code></pre>
+<h4 id="list-the-blobs-in-a-container">List the blobs in a container</h4>
+<h5 id="use-the-azure-portal-5">Use the Azure portal</h5>
+<p>If you’re using the Azure portal, go to the page for your storage account and select <strong>Containers</strong> under <strong>Blob service</strong>.</p>
+<h5 id="use-the-azure-cli-6">Use the Azure CLI</h5>
+<pre><code>az storage blob list \
+  --account-name contosodata \
+  --container-name "images"
+
+</code></pre>
+<h5 id="use-azure-powershell-6">Use Azure PowerShell</h5>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "contoso-group" `
+  -Name "contosodata" | Get-AzStorageBlob `
+    -Container "images"
+</code></pre>
+<h4 id="download-a-blob-from-a-container">Download a blob from a container</h4>
+<h5 id="use-the-azure-portal-6">Use the Azure portal</h5>
+<p>Select the blob to view its details. On the details page, select <strong>Download</strong>.</p>
+<h5 id="use-the-azure-cli-7">Use the Azure CLI</h5>
+<pre><code>az storage blob download \
+  --container-name images \
+  --account-name contosodata \
+  --file "racer_green_large.gif" \
+  --name "bikes\racer_green"
+</code></pre>
+<h5 id="use-azure-powershell-7">Use Azure PowerShell</h5>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "contoso-group" `
+  -Name "contosodata" | Get-AzStorageBlobContent `
+    -Container "images" `
+    -Blob "bikes\racer_green_large.gif" `
+    -Destination "racer_green_large.gif" 
+</code></pre>
+<h4 id="delete-a-blob-from-a-container">Delete a blob from a container</h4>
+<p>Deleting a blob can reclaim the resources used in the storage container. However, if you’ve enabled the soft delete option for the storage account, the blob is hidden rather than removed, and you can restore it later.<br>
+If you created the storage account with support for hierarchical namespaces (for Data Lake Storage), the soft delete option isn’t available.</p>
+<h5 id="use-the-azure-portal-7">Use the Azure portal</h5>
+<p>Select the blob to view its details. On the details page, select <strong>Delete</strong>.</p>
+<h5 id="use-the-azure-cli-8">Use the Azure CLI</h5>
+<pre><code>az storage blob delete \
+  --account-name contosodata \
+  --container-name "images" \
+  --name "bikes\racer_green"
+</code></pre>
+<h5 id="use-azure-powershell-8">Use Azure PowerShell</h5>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "contoso-group" `
+  -Name "contosodata" | Remove-AzStorageBlob `
+    -Container "images" `
+    -Blob "bikes\racer_green" `
+    -Confirm
+</code></pre>
+<h4 id="delete-an-azure-storage-container">Delete an Azure Storage container</h4>
+<h5 id="use-the-azure-portal-8">Use the Azure portal</h5>
+<p>In the Azure portal, select <strong>Containers</strong> under <strong>Blob service</strong>, select the container to delete, and then select <strong>Delete</strong> in the toolbar.</p>
+<h5 id="use-the-azure-cli-9">Use the Azure CLI</h5>
+<pre><code>az storage container delete \
+  --account-name contosodata \
+  --name "images"
+</code></pre>
+<h5 id="use-azure-powershell-9">Use Azure PowerShell</h5>
+<pre><code>Get-AzStorageAccount `
+  -ResourceGroupName "contoso-group" `
+  -Name "contosodata" | Remove-AzStorageContainer `
+    -Name "images" `
+    -Confirm
+</code></pre>
+<h3 id="manage-azure-file-storage">Manage Azure File storage</h3>
+<h4 id="create-a-file-share">Create a file share</h4>
+<h5 id="use-the-azure-portal-9">Use the Azure portal</h5>
+<p>Select <strong>File shares</strong> in the main pane of the <strong>Overview</strong> page for an Azure Storage account</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-non-relational-data-stores-azure/media/5-file-shares.png" alt="Image of the Overview page for a storage account in the Azure portal. The user has selected the File shares command"><br>
+On the <strong>File shares</strong> page, select <strong>+ File share</strong>. Give the file share a name, and optionally specify a quota. Azure allows you to store up to 5 PiB of files across all files shares in a storage account. A quota enables you to limit the amount of space an individual file share consumes, to prevent it from starving other file shares of file storage.</p>
+<p>The <strong>Connect</strong> command generates a PowerShell script that you can run to attach to the share from your local computer.</p>
+<h5 id="use-azure-storage-explorer">Use Azure Storage Explorer</h5>
+<p>Azure Storage Explorer is a utility that enables you to manage Azure Storage accounts from your desktop computer. You can use Storage Explorer to create blob containers and file shares, as well as upload and download files. A version of this utility is also available in the Azure portal, on the <strong>Overview</strong> page for an Azure Storage account.</p>
+<p>To create a new file share, right-click <strong>File Shares</strong>, and then select <strong>Create file share</strong>.</p>
+<h4 id="upload-and-download-files">Upload and download files</h4>
+<p>You can upload and download individual files to and from Azure File storage manually, by using Storage Explorer, the Azure portal, or by connecting the file share to your desktop computer and dragging and dropping files in File Explorer.</p>
+<h5 id="azcopy">AzCopy</h5>
+<p>However, if you need to transfer a significant number of files in and out of Azure File storage, you should use the AzCopy utility. AzCopy is a command-line utility optimized for transferring large files (and blobs) between your local computer and Azure File storage. It can detect transfer failures, and restart a failed transfer at the point an error occurred - you don’t have to repeat the entire operation.</p>
+<h6 id="generate-an-sas-token">Generate an SAS token</h6>
+<p>Before you can use AzCopy, you generate a <em>Shared access signature (SAS) token</em>. A SAS token provides controlled, time-limited, anonymous access to services and resources in a storage account; users don’t have to provide any additional credentials. SAS tokens are useful in situations where you don’t know in advance which users will require access to your resources.</p>
+<p>You can create an SAS token for connecting to Azure File storage using the Azure portal. On the page for your storage account, under <strong>Settings</strong>, select <strong>Shared access signature</strong>.</p>
+<h5 id="upload-files">Upload files</h5>
+<pre><code>azcopy copy "myfile.txt" "https://&lt;storage-account-name&gt;.file.core.windows.net/&lt;file-share-name&gt;/myfile.txt&lt;SAS-token&gt;"
+</code></pre>
+<pre><code>azcopy copy "myfolder" "https://&lt;storage-account-name&gt;.file.core.windows.net/&lt;file-share-name&gt;/myfolder&lt;SAS-token&gt;" --recursive
+</code></pre>
+<h4 id="download-files">Download files</h4>
+<pre><code>azcopy copy "https://&lt;storage-account-name&gt;.file.core.windows.net/myshare/myfolder&lt;SAS-token&gt;" "localfolder" --recursive
+</code></pre>
+<h1 id="explore-modern-data-warehouse-analytics-in-azure">Explore modern data warehouse analytics in Azure</h1>
+<h2 id="examine-components-of-a-modern-data-warehouse">Examine components of a modern data warehouse</h2>
+<h3 id="describe-modern-data-warehousing">Describe modern data warehousing</h3>
+<p>A data warehouse gathers data from many different sources within an organization. This data is then used as the source for analysis, reporting, and online analytical processing (OLAP).</p>
+<p>Data warehouses have to handle <em>big data</em>. Big data is the term used for large quantities of data collected in escalating volumes, at higher velocities, and in a greater variety of formats than ever before. It can be historical (meaning stored) or real time (meaning streamed from the source).</p>
+<h4 id="what-is-modern-data-warehousing">What is modern data warehousing?</h4>
+<p><a href="https://docs.microsoft.com/en-us/learn/modules/examine-components-of-modern-data-warehouse/2-describe-warehousing">hier weiter</a></p>
 
