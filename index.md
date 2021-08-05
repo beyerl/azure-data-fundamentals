@@ -1500,5 +1500,254 @@ On the <strong>File shares</strong> page, select <strong>+ File share</strong>. 
 <p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/examine-components-of-modern-data-warehouse/media/3-data-factory.png" alt="Screenshot of the Azure Data Factory design window, showing an example pipeline"></p>
 <h4 id="what-is-azure-data-lake-storage">What is Azure Data Lake Storage?</h4>
 <p>A data lake is a repository for large quantities of raw data. Because the data is raw and unprocessed, it’s very fast to load and update, but the data hasn’t been put into a structure suitable for efficient analysis.</p>
-<p><a href="https://docs.microsoft.com/en-us/learn/modules/examine-components-of-modern-data-warehouse/3-explore-azure-data-services-warehousing">hier weiter</a></p>
+<ul>
+<li>Data Lake Storage organizes your files into directories and subdirectories for improved file organization. Blob storage can only mimic a directory structure.</li>
+<li>Data Lake Storage supports the Portable Operating System Interface (POSIX) file and directory permissions to enable granular Role-Based Access Control (RBAC) on your data.</li>
+<li>Azure Data Lake Storage is compatible with the Hadoop Distributed File System (HDFS). Hadoop is highly flexible and programmable analysis service, used by many organizations to examine large quantities of data. All Apache Hadoop environments can access data in Azure Data Lake Storage Gen2.</li>
+</ul>
+<p>In an Azure Data Services data warehouse solution, data is typically loaded into Azure Data Lake Storage before being processed into a structure that enables efficient analysis in Azure Synapse Analytics. You can use a service such as Azure Data Factory (described above) to ingest and load the data from a variety of sources into Azure Data Lake Storage.</p>
+<h4 id="what-is-azure-databricks">What is Azure Databricks?</h4>
+<p>Azure Databricks is an Apache Spark environment running on Azure to provide big data processing, streaming, and machine learning. Apache Spark is a highly efficient data processing engine that can consume and process large amounts of data very quickly. There are a significant number of Spark libraries you can use to perform tasks such as SQL processing, aggregations, and to build and train machine learning models using your data.</p>
+<p>You can create Databricks scripts and query data using languages such as R, Python, and Scala. You write your Spark code using <em>notebooks</em>. A notebook contains <em>cells</em>, each of which contains a separate block of code. When you run a notebook, the code in each cell is passed to Spark in turn for execution. The image below shows a cell in a workbook that runs a query and generates a graph.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/examine-components-of-modern-data-warehouse/media/3-databricks.png" alt="Graphic showing a notebook running in Azure Databricks"><br>
+Azure Databricks also supports structured stream processing.</p>
+<h4 id="what-is-azure-synapse-analytics">What is Azure Synapse Analytics?</h4>
+<p>Azure Synapse Analytics is an analytics engine. It’s designed to process large amounts of data very quickly.</p>
+<p>Using Synapse Analytics, you can ingest data from external sources, such as flat files, Azure Data Lake, or other database management systems, and then transform and aggregate this data into a format suitable for analytics processing. You can perform complex queries over this data and generate reports, graphs, and charts.</p>
+<p>Azure Synapse Analytics leverages a massively parallel processing (MPP) architecture. This architecture includes a control node and a pool of compute nodes.</p>
+<p>The <em>Control</em> node is the brain of the architecture. It’s the front end that interacts with all applications. When you submit a processing request, the Control node transforms it into smaller requests that run against distinct subsets of the data in parallel.</p>
+<p>The <em>Compute</em> nodes provide the computational power. The data to be processed is distributed evenly across the nodes.</p>
+<p>Azure Synapse Analytics supports two computational models: SQL pools and Spark pools.</p>
+<p>In a SQL pool, each compute node uses an Azure SQL Database and Azure Storage to handle a portion of the data.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/examine-components-of-modern-data-warehouse/media/3-synapse.png" alt="Graphic showing the structure of Azure Synapse Analytics"><br>
+You submit queries in the form of Transact-SQL statements, and Azure Synapse Analytics runs them. However, unlike an ordinary SQL Server database engine, Azure Synapse Analytics can receive data from a wide variety of sources. To do this, Azure Synapse Analytics uses a technology named PolyBase. PolyBase enables you to retrieve data from relational and non-relational sources, such as delimited text files, Azure Blob Storage, and Azure Data Lake Storage. You can save the data read in as SQL tables within the Synapse Analytics service.</p>
+<p>You can only scale a SQL pool when it’s not running a Transact-SQL query.</p>
+<p>In a Spark pool, the nodes are replaced with a Spark cluster. You run Spark jobs comprising code written in Notebooks, in the same way as Azure Databricks. You can write the code for notebook in C#, Python, Scala, or Spark SQL (a different dialect of SQL from Transact-SQL). As with a SQL pool, the Spark cluster splits the work out into a series of parallel tasks that can be performed concurrently. You can save data generated by your notebooks in Azure Storage or Data Lake Storage.</p>
+<p>Spark is optimized for in-memory processing. A Spark job can load and cache data into memory and query it repeatedly. In-memory computing is much faster than disk-based applications, but requires additional memory resources.</p>
+<p>Spark pools can have autoscaling enabled, so that pools scale by adding or removing nodes as needed. Autoscaling can occur while processing is active.</p>
+<p>Azure Synapse Analytics can consume a lot of resources. If you aren’t planning on performing any processing for a while, you can pause the service.</p>
+<h4 id="what-is-azure-analysis-services">What is Azure Analysis Services?</h4>
+<p>Azure Analysis Services enables you to build tabular models to support online analytical processing (OLAP) queries. You can combine data from multiple sources, including Azure SQL Database, Azure Synapse Analytics, Azure Data Lake store, Azure Cosmos DB, and many others. You use these data sources to build models that incorporate your business knowledge. A model is essentially a set of queries and expressions that retrieve data from the various data sources and generate results. The results can be cached in-memory for later use, or they can be calculated dynamically, directly from the underlying data sources.</p>
+<h5 id="compare-analysis-services-with-synapse-analytics">Compare Analysis Services with Synapse Analytics</h5>
+<p>Azure Analysis Services has significant functional overlap with Azure Synapse Analytics, but it’s more suited for processing on a smaller scale.</p>
+<p>Use Azure Synapse Analytics for:</p>
+<ul>
+<li>Very high volumes of data (multi-terabyte to petabyte sized datasets).</li>
+<li>Very complex queries and aggregations.</li>
+<li>Data mining, and data exploration.</li>
+<li>Complex ETL operations.</li>
+<li>Low to mid concurrency (128 users or fewer).</li>
+</ul>
+<p>Use Azure Analysis Services for:</p>
+<ul>
+<li>Smaller volumes of data (a few terabytes).</li>
+<li>Multiple sources that can be correlated.</li>
+<li>High read concurrency (thousands of users).</li>
+<li>Detailed analysis, and drilling into data, using functions in Power BI.</li>
+<li>Rapid dashboard development from tabular data.</li>
+</ul>
+<h5 id="combine-analysis-services-with-synapse-analytics">Combine Analysis Services with Synapse Analytics</h5>
+<p>Many scenarios can benefit from using Synapse Analytics and Analysis Services together. If you have large amounts of ingested data that require preprocessing, you can use Synapse Analytics to read this data and manipulate it into a model that contains business information rather than a large amount of raw data. You can then use Analysis Services to perform detailed interrogation of this information, and visualize the results of these inquiries with Power BI.</p>
+<h4 id="what-is-azure-hdinsight">What is Azure HDInsight?</h4>
+<p>Azure HDInsight is a big data processing service, that provides the platform for technologies such as Spark in an Azure environment. HDInsight implements a clustered model that distributes processing across a set of computers. This model is similar to that used by Synapse Analytics, except that the nodes are running the Spark processing engine rather than Azure SQL Database. As well as Spark, HDInsight supports streaming technologies such as Apache Kafka, and the Apache Hadoop processing model.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/examine-components-of-modern-data-warehouse/media/3-hdinsight.png" alt="Graphic showing how HDInisght fits into a data warehousing solution"><br>
+<em>Hive</em> is a SQL-like query facility that you can use with an HDInsight cluster to examine data held in a variety of formats. You can use it to create, load, and query external tables, in a manner similar to PolyBase for Azure Synapse Analytics.</p>
+<h2 id="explore-data-ingestion-in-azure">Explore data ingestion in Azure</h2>
+<h3 id="describe-common-practices-for-data-loading">Describe common practices for data loading</h3>
+<p>In a big data system, data ingestion has to be fast enough to capture the large quantities of data that may be heading your way, and have enough compute power to process this data in a timely manner.</p>
+<h4 id="ingest-data-using-azure-data-factory">Ingest data using Azure Data Factory</h4>
+<p>Data Factory provides an <em>orchestration</em> engine. Orchestration is the process of directing and controlling other services, and connecting them together, to allow data to flow between them. Data Factory uses orchestration to combine and automate sequences of tasks that use different services to perform complex operations.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-ingestion-azure/media/2-enterprise-bi-adf.png" alt="Image summarizing the role of Azure Data Factory for ingesting and processing data"></p>
+<h5 id="understand-linked-services">Understand linked services</h5>
+<p>Data Factory moves data from a data source to a destination. A linked service provides the information needed for Data Factory to connect to a source or destination. The information a linked service contains varies according to the resource.</p>
+<h5 id="understand-datasets">Understand datasets</h5>
+<p>A dataset in Azure Data Factory represents the data that you want to ingest (input) or store (output).</p>
+<h5 id="understand-pipelines">Understand pipelines</h5>
+<p>A pipeline is a logical grouping of activities that together perform a task. The activities in a pipeline define actions to perform on your data.</p>
+<p>Pipelines don’t have to be linear. You can include logic activities that repeatedly perform a series of tasks while some condition is true using a <em>ForEach</em> activity, or follow different processing paths depending on the outcome of previous processing using an <em>If Condition</em> activity.</p>
+<p>Sometimes when ingesting data, the data you’re bringing in can have different column names and data types to those required by the output. In these cases, you can use a mapping to transform your data from the input format to the output format. The screenshot below shows the mapping canvas for the <em>Copy Data</em> activity.</p>
+<p>You can run a pipeline manually, or you can arrange for it to be run later using a trigger.</p>
+<h4 id="ingest-data-using-polybase">Ingest data using PolyBase</h4>
+<p>PolyBase is a feature of SQL Server and Azure Synapse Analytics that enables you to run Transact-SQL queries that read data from external data sources. PolyBase makes these external data sources appear like tables in a SQL database. Using PolyBase, you can read data managed by Hadoop, Spark, and Azure Blob Storage, as well as other database management systems such as Cosmos DB, Oracle, Teradata, and MongoDB.</p>
+<p>Azure SQL Database does not support PolyBase. Azure Data Factory provides PolyBase support for loading data.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-ingestion-azure/media/2-polybase.png" alt="Image showing SQL Database using PolyBase to access external data"></p>
+<h4 id="ingest-data-using-sql-server-integration-services">Ingest data using SQL Server Integration Services</h4>
+<p>SQL Server Integration Services (SSIS) is a platform for building enterprise-level data integration and data transformations solutions.</p>
+<p>SSIS can extract and transform data from a wide variety of sources such as XML data files, flat files, and relational data sources, and then load the data into one or more destinations.</p>
+<p>You can use the graphical SSIS tools to create solutions without writing a single line of code. You can also program the extensive Integration Services object model to create packages programmatically and code custom tasks and other package objects.</p>
+<p>SSIS is an on-premises utility. However, Azure Data factory allows you to run your existing SSIS packages as part of a pipeline in the cloud. This allows you to get started quickly without having to rewrite your existing transformation logic.</p>
+<h4 id="ingest-data-using-azure-databricks">Ingest data using Azure Databricks</h4>
+<p>Azure Databricks is an analytics platform optimized for the Microsoft Azure cloud services platform. Databricks is based on Spark, and is integrated with Azure to streamline workflows. You write and run Spark code using <em>notebooks</em>. The scalability of Azure Databricks makes it an ideal platform for performing complex data ingestion and analytics tasks.</p>
+<h2 id="explore-data-storage-and-processing-in-azure">Explore data storage and processing in Azure</h2>
+<h3 id="describe-data-storage-and-processing-with-azure">Describe data storage and processing with Azure</h3>
+<h4 id="what-is-azure-synapse-analytics-1">What is Azure Synapse Analytics?</h4>
+<p>Azure Synapse Analytics is a generalized analytics service. You can use it to read data from many sources, process this data, generate various analyses and models, and save the results.</p>
+<p>You can select between two technologies to process data:</p>
+<ul>
+<li><em>Transact-SQL</em>. This is the same dialect of SQL used by Azure SQL Database, with some extensions for reading data from external sources, such as databases, files, and Azure Data Lake storage.</li>
+<li><em>Spark</em>. This is the same open-source technology used to power Azure Databricks. You write your analytical code using notebooks in a programming language such as C#, Scala, Python, or SQL.</li>
+</ul>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-storage-processing-azure/media/2-synapse.png" alt="Image showing the elements of Azure Synapse Analytics"></p>
+<h4 id="what-is-azure-databricks-1">What is Azure Databricks?</h4>
+<p>Azure Databricks is an analytics platform optimized for the Microsoft Azure cloud services platform. Designed with the founders of Apache Spark, Databricks is integrated with Azure to provide one-click setup, streamlined workflows, and an interactive workspace that enables collaboration between data scientists, data engineers, and business analysts.</p>
+<p>Databricks can process data held in many different types of storage, including Azure Blob storage, Azure Data Lake Store, Hadoop storage, flat files, databases, and data warehouses. Databricks can also process streaming data. Databricks uses an extensible architecture based on drivers.</p>
+<p>A <em>driver</em> is a piece of code that connects to a specific data source and enables you to read and write that source.</p>
+<h5 id="what-is-azure-hdinsight-1">What is Azure HDInsight?</h5>
+<p>Azure HDInsight is a managed analytics service in the cloud. It’s based on Apache Hadoop, a collection of open-source tools and utilities that enable you to run processing tasks over large amounts of data. HDInsight uses a clustered model, similar to that of Synapse Analytics. HDInsight stores data using Azure Data Lake storage. You can use HDInsight to analyze data using frameworks such as Hadoop Map/Reduce, Apache Spark, Apache Hive, Apache Kafka, Apache Storm, R, and more.</p>
+<p>Hadoop Map/Reduce uses a simple framework to split a task over a large dataset into a series of smaller tasks over subsets of the data that can be run in parallel, and the results then combined. You write your Map/Reduce code in a language such as Java, and then submit this code as a job to the Hadoop cluster. Hadoop Map/Reduce has largely been replaced by Spark, which offers a more advanced set of operations and a simpler interface.</p>
+<p>Apache Hive provides interactive SQL-like facilities for querying, aggregating, and summarizing data.</p>
+<p>Apache Kafka is a clustered streaming service that can ingest data in real time.</p>
+<p>Apache Storm is a scalable, fault tolerant platform for running real-time data processing applications. Storm can process high volumes of streaming data using comparatively modest computational requirements. Storm can interoperate with a variety of event sources, including Azure Event Hubs, Azure IoT Hub, Apache Kafka, and RabbitMQ (a message queuing service). Storm can also write to data stores such as HDFS, Hive, HBase, Redis, and SQL databases.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-storage-processing-azure/media/2-hdinsight.png" alt="Image showing the elements of HDInsight"></p>
+<h4 id="what-is-azure-data-factory-1">What is Azure Data Factory?</h4>
+<p>Azure Data Factory is a service that can ingest large amounts of raw, unorganized data from relational and non-relational systems, and convert this data into meaningful information. Data Factory provides a scalable and programmable ingestion engine that you can use to implement complex hybrid extract-transform-load (ETL), extract-load-transform (ELT), and data integration projects.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-storage-processing-azure/media/2-data-factory-pipeline.png" alt="Image showing a Data Factory pipeline"></p>
+<h4 id="what-is-azure-data-lake">What is Azure Data Lake?</h4>
+<p>Azure Data Lake is a collection of analytics and storage services that you can combine to implement a big data solution. It comprises three main elements:</p>
+<ul>
+<li>Data Lake Store</li>
+<li>Data Lake Analytics</li>
+<li>HDInsight</li>
+</ul>
+<h5 id="what-is-data-lake-store">What is Data Lake Store?</h5>
+<p>Data Lake Store provides a file system that can store near limitless quantities of data. It uses a hierarchical organization (like the Windows and Linux file systems), but you can hold massive amounts of raw data (blobs) and structured data.</p>
+<p>Azure Data Lake Store is compatible with the Hadoop Distributed File System (HDFS).</p>
+<p>Azure Data Lake Store provides granular security over data, using Access Control Lists. If you are more familiar with Linux, you can use POSIX-style permissions to grant read, write, and search access based on file ownership and group membership of users.</p>
+<h5 id="what-is-data-lake-analytics">What is Data Lake Analytics?</h5>
+<p>Azure Data Lake Analytics is an on-demand analytics job service that you can use to process big data. It provides a framework and set of tools that you use to analyze data held in Microsoft Azure Data Lake Store, and other repositories. You write jobs that contain queries to transform data and extract insights.</p>
+<p>You define a job using a language called U-SQL. This is a hybrid language that takes features from both SQL and C#, and provides declarative and procedural capabilities that you can use to process data.</p>
+<pre><code>@priceData =
+    EXTRACT Ticker string,
+            Price int
+    FROM "/StockMarket/StockPrices.csv"
+    USING Extractors.Csv(skipFirstNRows: 1);
+
+@maxPrices =
+    SELECT Ticker, MAX(Price) AS MaxPrice
+    FROM @priceData
+    GROUP BY Ticker;
+
+OUTPUT @maxPrices   
+    TO "/output/MaxPrices.csv"
+    USING Outputters.Csv(outputHeader: true);
+</code></pre>
+<p>It’s important to understand that the U-SQL code only provides a description of the work to be performed. Azure Data Lake Analytics determines how best to actually carry out this work.</p>
+<h3 id="explore-azure-synapse-analytics">Explore Azure Synapse Analytics</h3>
+<h4 id="what-are-the-components-of-azure-synapse-analytics">What are the components of Azure Synapse Analytics?</h4>
+<p>Azure Synapse Analytics is an integrated analytics service that allows organizations to gain insights quickly from all their data at any hyperscale, from both data warehouses and big data analytics systems.</p>
+<p>Azure Synapse is composed of the following elements:</p>
+<ul>
+<li><strong>Synapse SQL pool</strong>: This is a collection of servers running Transact-SQL. Transact-SQL is the dialect of SQL used by Azure SQL Database, and Microsoft SQL Server. You write your data processing logic using Transact-SQL.</li>
+<li><strong>Synapse Spark pool</strong>: This is a cluster of servers running Apache Spark to process data. You write your data processing logic using one of the four supported languages: Python, Scala, SQL, and C# (via .NET for Apache Spark). Spark pools support Azure Machine Learning through integration with the SparkML and AzureML packages.</li>
+<li><strong>Synapse Pipelines</strong>: A Synapse pipeline is a logical grouping of activities that together perform a task. The activities in a pipeline define actions to perform on your data.</li>
+<li><strong>Synapse Link</strong>: This component allows you to connect to Cosmos DB. You can use it to perform near real-time analytics over the operational data stored in a Cosmos DB database.</li>
+<li><strong>Synapse Studio</strong>: This is a web user interface that enables data engineers to access all the Synapse Analytics tools.</li>
+</ul>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-storage-processing-azure/media/3-azure-synapse-analytics-overview.png" alt="Diagram showing the components of Azure Synapse Analytics. Synapse Studio, Synapse Pipelines, Synapse SQL pools, Synapse Spark pools, and Synapse Link"></p>
+<h4 id="what-are-sql-pools">What are SQL pools?</h4>
+<p>When you use Synapse SQL, your analytics workload runs using a SQL pool. In a SQL pool, the Control and Compute nodes in the cluster run a version of Azure SQL Database that supports distributed queries. You define your logic using Transact-SQL statements. You send your Transact-SQL statements to the control node, which splits up the work into queries that operate over a subset of the data, and then sends these smaller queries to the compute nodes. The data is split into chunks called <em>distributions</em>. A distribution is the basic unit of storage and processing for parallel queries that run on distributed data.</p>
+<p>The control and compute nodes use the Data Movement Service (DMS) to move data across the nodes as necessary to run queries in parallel and return accurate results.</p>
+<p>Synapse Analytics uses a technology called <em>PolyBase</em> to make external data look like SQL tables. You can run queries against these tables directly, or you can transfer the data into a series of SQL tables managed by Synapse Analytics for querying later. Synapse uses Azure Storage to manage your data while it’s being processed.</p>
+<p>By default, an on-demand SQL pool is created in each Azure Synapse Analytics workspace. You can then provision additional pools, either on-demand or provisioned.</p>
+<p>On-demand pools only allow you to query data held in external files. If you want to ingest and load the data into Synapse Analytics, you must create your own SQL pool.</p>
+<p>Azure Synapse Analytics is designed to run queries over massive datasets. You can manually scale the SQL pool up to 60 nodes. You can also <em>pause</em> a SQL pool if you don’t require it for a while.</p>
+<p>Use SQL pools in Synapse Analytics for the following scenarios:</p>
+<ul>
+<li>
+<p><em>Complex reporting</em>. You can use the full power of Transact-SQL to run complex SQL statements that summarize and aggregate data.</p>
+</li>
+<li>
+<p><em>Data ingestion</em>. PolyBase enables you to retrieve data from many external sources and convert it into a tabular format. You can reformat this data and save it as tables and materialized views in Azure Synapse.</p>
+</li>
+</ul>
+<h4 id="what-are-spark-pools">What are Spark pools?</h4>
+<p>Synapse Spark runs clusters based on Apache Spark rather than Azure SQL Database. You write your analytics jobs as notebooks, using code written in Python, Scala, C#, or Spark SQL (this is a different dialect from Transact-SQL).</p>
+<p>Spark pools and SQL pools can coexist in the same Azure Synapse Analytics instance.</p>
+<p>Notebooks also allow you to visualize data through graphs, and transform data as it’s loaded. The data can then be used by Spark Machine Learning (SparkML) and Azure Machine Learning (AzureML) to train machine learning models that support artificial intelligence.</p>
+<p>Spark pools provide the basic building blocks for performing in-memory cluster computing. A Spark job can load and cache data into memory and query it repeatedly. In-memory computing is much faster than disk-based applications.</p>
+<p>Spark pools can have autoscaling enabled, so that pools scale by adding or removing nodes as needed. Also, Spark pools can be shut down with no loss of data since all the data is stored in Azure Storage or Data Lake Storage.</p>
+<p>Spark pools in Synapse Analytics are especially suitable for the following scenarios:</p>
+<ul>
+<li>
+<p><em>Data Engineering/Data Preparation</em>. Apache Spark includes many language features to support preparation and processing of large volumes of data so that it can be made more valuable and then consumed by other services within Synapse Analytics.</p>
+</li>
+<li>
+<p><em>Machine Learning</em>. Apache Spark comes with MLlib, a machine learning library built on top of Spark that you can use from a Spark pool in Synapse Analytics. Spark pools in Synapse Analytics also include Anaconda, a Python distribution with a variety of packages for data science including machine learning.</p>
+</li>
+</ul>
+<h4 id="what-are-synapse-pipelines">What are Synapse pipelines?</h4>
+<p>A pipeline is a logical grouping of activities that together perform a task. The activities in a pipeline define actions to perform on your data. Synapse pipelines use the same Data Integration engine used by Azure Data Factory.</p>
+<p>You can create codeless data flows that let you do complex mappings and transformations on data as it flows into your analytic solutions. The example below shows a pipeline with three activities. The pipeline ingests data, and then uses a Spark notebook to generate a machine learning model. The Azure function at the end of the pipeline tests the machine learning model to validate it.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-storage-processing-azure/media/3-pipeline.png" alt="Screenshot of a simple pipeline containing three activities"></p>
+<h5 id="what-is-synapse-link">What is Synapse Link?</h5>
+<p>Azure Synapse Link for Azure Cosmos DB is a cloud-native hybrid transactional and analytical processing (HTAP) capability that enables you to run near real-time analytics over operational data stored in Azure Cosmos DB.</p>
+<p>Synapse link uses a feature of Cosmos DB named <em>Cosmos DB Analytical Store</em>. Cosmos DB Analytical Store contains a copy of the data in a Cosmos DB container, but organized as a column store. Column stores are a more optimal format for running analytical workloads that need to aggregate data down a column rather than across a row, such as generating sum totals, averages, maximum or minimum values for a column.</p>
+<p>Azure Synapse Link enables you to run workloads that retrieve data directly from Cosmos DB and run analytics workloads using Azure Synapse Analytics. The data doesn’t have to go through an ETL (extract, transform, and load) process because the data isn’t copied into Synapse Analytics; it remains in the Cosmos DB analytical store.</p>
+<p>Synapse link has a wide range of uses, including:</p>
+<ul>
+<li>
+<p><em>Supply chain analytics and forecasting</em>.</p>
+</li>
+<li>
+<p><em>Operational reporting</em>.</p>
+</li>
+<li>
+<p><em>Batch data integration and orchestration</em>.</p>
+</li>
+<li>
+<p><em>Real-time personalization</em>.</p>
+</li>
+<li>
+<p><em>IoT maintenance</em>.</p>
+</li>
+</ul>
+<h4 id="what-is-synapse-studio">What is Synapse Studio?</h4>
+<p>Synapse Studio is a web interface that enables you to create pools and pipelines interactively. With Synapse Studio you can develop, test, and debug Spark notebooks and Transact-SQL jobs</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/explore-data-storage-processing-azure/media/3-synapse-studio.png" alt="Screenshot Synapse Studio"></p>
+<h2 id="get-started-building-with-power-bi">Get started building with Power BI</h2>
+<h3 id="introduction">Introduction</h3>
+<p><strong>Microsoft Power BI</strong> is a collection of software services, apps, and connectors that work together to turn your unrelated sources of data into coherent, visually immersive, and interactive insights.</p>
+<p><strong>Power BI</strong> can be simple and fast, capable of creating quick insights from an Excel workbook or a local database. But <strong>Power BI</strong> is also robust and enterprise-grade, ready not only for extensive modeling and real-time analytics, but also for custom development.</p>
+<h4 id="the-parts-of-power-bi">The parts of Power BI</h4>
+<p>Power BI consists of a Microsoft Windows desktop application called <strong>Power BI Desktop</strong>, an online SaaS (<em>Software as a Service</em>) service called the <strong>Power BI service</strong>, and mobile Power BI <strong>apps</strong> that are available on any device, with native mobile BI apps for Windows, iOS, and Android.</p>
+<h4 id="how-power-bi-matches-your-role">How Power BI matches your role</h4>
+<p>How you use Power BI might depend on your role on a project or a team.</p>
+<h3 id="use-power-bi">Use Power BI</h3>
+<p>The activities and analyses that you’ll learn with Power BI generally follow a common flow. The <strong>common flow</strong> of activity looks like this:</p>
+<ol>
+<li>Bring data into Power BI Desktop and create a report.</li>
+<li>Publish to the Power BI service, where you can create new visualizations or build dashboards.</li>
+<li>Share dashboards with others, especially people who are on the go.</li>
+<li>View and interact with shared dashboards and reports in Power BI Mobile apps.</li>
+</ol>
+<h3 id="building-blocks-of-power-bi">Building blocks of Power BI</h3>
+<p>Everything you do in Microsoft Power BI can be broken down into a few basic <strong>building blocks</strong>. After you understand these building blocks, you can expand on each of them and begin creating elaborate and complex reports.</p>
+<p>Here are the basic building blocks in Power BI:</p>
+<ul>
+<li>Visualizations</li>
+<li>Datasets</li>
+<li>Reports</li>
+<li>Dashboards</li>
+<li>Tiles</li>
+</ul>
+<h4 id="visualizations">Visualizations</h4>
+<p>A <strong>visualization</strong> (sometimes also referred to as a <strong>visual</strong>) is a visual representation of data, like a chart, a color-coded map, or other interesting things you can create to represent your data visually</p>
+<h4 id="datasets">Datasets</h4>
+<p>A <strong>dataset</strong> is a collection of data that Power BI uses to create its visualizations. <strong>Datasets</strong> can also be a combination of many different sources, which you can filter and combine to provide a unique collection of data (a dataset) for use in Power BI.</p>
+<p>An important and enabling part of Power BI is the multitude of data <strong>connectors</strong> that are included. Whether the data you want is in Excel or a Microsoft SQL Server database, in Azure or Oracle, or in a service like Facebook, Salesforce, or MailChimp, Power BI has built-in data connectors that let you easily connect to that data, filter it if necessary, and bring it into your dataset.</p>
+<h4 id="reports">Reports</h4>
+<p>In Power BI, a <strong>report</strong> is a collection of visualizations that appear together on one or more pages. Just like any other report you might create for a sales presentation or write for a school assignment, a report in Power BI is a collection of items that are related to each other.</p>
+<h4 id="dashboards">Dashboards</h4>
+<p>When you’re ready to share a report, or a collection of visualizations, you create a <strong>dashboard</strong>. Much like the dashboard in a car, a Power BI <strong>dashboard</strong> is a collection of visuals from a single page that you can share with others. Often, it’s a selected group of visuals that provide quick insight into the data or story you’re trying to present. A dashboard must fit on a single page, often called a canvas.</p>
+<h4 id="tiles">Tiles</h4>
+<p>In Power BI, a <strong>tile</strong> is a single visualization on a dashboard. It’s the rectangular box that holds an individual visual.</p>
+<h3 id="tour-and-use-the-power-bi-service">Tour and use the Power BI service</h3>
+<p>An <strong>app</strong> is a collection of preset, ready-made visuals and reports that are shared with an entire organization.</p>
+<h4 id="create-out-of-the-box-dashboards-with-cloud-services">Create out-of-the-box dashboards with cloud services</h4>
+<p>With Power BI, connecting to data is easy. From the Power BI service, you can just select the <strong>Get Data</strong> button in the lower-left corner of the home page.</p>
+<p>The <em>canvas</em> (the area in the center of the Power BI service) shows you the available sources of data in the Power BI service.</p>
+<p>For these software services, the <strong>Power BI service</strong> provides a collection of ready-made visuals that are pre-arranged on dashboards and reports for your organization. This collection of visuals is called an <strong>app</strong>.</p>
+<h4 id="update-data-in-the-power-bi-service">Update data in the Power BI service</h4>
+<p>You can also choose to <strong>update</strong> the dataset for an app, or other data that you use in Power BI. To set update settings, select the schedule update icon for the dataset that you want to update, and then use the menu that appears.</p>
+<p>The <strong>Datasets</strong> tab is selected on the <strong>Settings</strong> page that appears. In the right pane, select the arrow next to <strong>Scheduled refresh</strong> to expand that section.</p>
 
