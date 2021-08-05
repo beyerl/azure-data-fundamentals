@@ -1489,5 +1489,16 @@ On the <strong>File shares</strong> page, select <strong>+ File share</strong>. 
 <p>A data warehouse gathers data from many different sources within an organization. This data is then used as the source for analysis, reporting, and online analytical processing (OLAP).</p>
 <p>Data warehouses have to handle <em>big data</em>. Big data is the term used for large quantities of data collected in escalating volumes, at higher velocities, and in a greater variety of formats than ever before. It can be historical (meaning stored) or real time (meaning streamed from the source).</p>
 <h4 id="what-is-modern-data-warehousing">What is modern data warehousing?</h4>
-<p><a href="https://docs.microsoft.com/en-us/learn/modules/examine-components-of-modern-data-warehouse/2-describe-warehousing">hier weiter</a></p>
+<p>A modern data warehouse might contain a mixture of relational and non-relational data, including files, social media streams, and Internet of Things (IoT) sensor data. Azure provides a collection of services you can use to build a data warehouse solution, including Azure Data Factory, Azure Data Lake Storage, Azure Databricks, Azure Synapse Analytics, and Azure Analysis Services. You can use tools such as Power BI to analyze and visualize the data, generating reports, charts, and dashboards.</p>
+<h4 id="combine-batch-and-stream-processing">Combine batch and stream processing</h4>
+<p>A typical large-scale business requires a combination of up-to-the-second data, and historical information.</p>
+<p>Historical data is equally important, to give a business a more stabilized view of trends in performance.</p>
+<p>Any modern data warehouse solution must be able to provide access to the streams of <em>raw</em> data, and the <em>cooked</em> business information derived from this data.</p>
+<h3 id="explore-azure-data-services-for-modern-data-warehousing">Explore Azure data services for modern data warehousing</h3>
+<h4 id="what-is-azure-data-factory">What is Azure Data Factory?</h4>
+<p>Azure Data Factory is described as a <em>data integration service</em>. The purpose of Azure Data Factory is to retrieve data from one or more data sources, and convert it into a format that you process. The data sources might present data in different ways, and contain <em>noise</em> that you need to filter out. The <em>interesting</em> data might not be in a suitable format for processing by the other services in your warehouse solution, so you can transform it. You define the work performed by Azure Data Factory as a pipeline of operations.</p>
+<p><img src="https://docs.microsoft.com/en-us/learn/wwl-data-ai/examine-components-of-modern-data-warehouse/media/3-data-factory.png" alt="Screenshot of the Azure Data Factory design window, showing an example pipeline"></p>
+<h4 id="what-is-azure-data-lake-storage">What is Azure Data Lake Storage?</h4>
+<p>A data lake is a repository for large quantities of raw data. Because the data is raw and unprocessed, it’s very fast to load and update, but the data hasn’t been put into a structure suitable for efficient analysis.</p>
+<p><a href="https://docs.microsoft.com/en-us/learn/modules/examine-components-of-modern-data-warehouse/3-explore-azure-data-services-warehousing">hier weiter</a></p>
 
